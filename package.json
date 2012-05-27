@@ -1,0 +1,24 @@
+{
+	"name": "nodegod",
+	"description": "Use express 3, handlebars.js and provide compiled templates as external JavaScript",
+	"author": "Harald Rudell <harald@allgoodapps.com> (http://www.haraldrudell.com",
+	"version": "0.0.1",
+	"private": true,
+	"contributors": [
+		{
+			"name": "Harald Rudell",
+			"email": "harald@allgoodapps.com",
+			"web": "http://blog.haraldrudell.com"
+		}
+	],
+	"dependencies": {
+		"express": "< 3",
+		"ejs": "",
+		"socket.io": "",
+		"ejsinbrowser": "",
+		"haraldops": ""
+	},
+	"scripts": {
+		"start": "node app"
+	}
+}

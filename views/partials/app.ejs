@@ -1,0 +1,16 @@
+<!-- app.ejs
+render one application provided in app
+-->
+<h2><%= app.name %></h2>
+<p>id: <%= app.id %>
+	<%= app.start %>
+	<%= app.currentState %>
+	<%= app.state %>
+	<%= app.watchFiles %>
+</p>
+<!-- we can't show/hide until buttons on the page, so assume a state -->
+<button class=debug>Debug</button>
+<button class=nodebug style=display:none>No Debug</button>
+<button class=start>Start</button>
+<button class=restart style=display:none>Restart</button>
+<button class=stop style=display:none>Stop</button>
