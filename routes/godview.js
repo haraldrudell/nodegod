@@ -10,13 +10,17 @@ module.exports = {
 
 //
 var appName
+var launchTime
 function index(req, res) {
+	var apps = godmodel.getApps()
 	res.render('index', {
 		title: appName,
-		apps: godmodel.getApps(),
+		apps: apps,
+		launch: launchTime,
 	})
 }
 
 function setTitle(title) {
 	appName = title
+	launchTime  = Date.now()
 }

@@ -3,23 +3,34 @@ render one application provided in app
 -->
 <h2><%= app.name %></h2>
 <div id=app<%= app.id %>>
-<ul><% for (var prop in app ) {
-	if (typeof app[prop] == 'function' || prop == 'name')
-		continue;%>
-	<li><%= prop %>: 
-		<% if (prop == 'watchFiles') { var files = app[prop]
-			if (!files.length) { %>None<% } else { %>
-			<ul><% files.forEach(function(file) { %>
-				<li><%= file %></li>
-			<% }) %></ul>
-		<% } } else { %>
-		<%= app[prop] %><% } %>
-	</li><% } %>
+<ul>
+	<li>state:<span class=state><%= app.state || '' %></span></li>
+	<li>pid:<span class=pid><%= app.pid || '' %></span></li>
+	<li>up since:<span class=upsince><%= app.lastLaunch ? new Date(app.lastLaunch) : '?' %></span></li>
+	<li>last exit code:<span class=exit><%= app.exitCode != null ? app.exitCode : '?' %></span></li>
+	<li>last crash:<span class=lastcrash><%= app.lastCrash ? new Date(app.lastCrash) : '?' %></span></li>
+	<li>crash Count:<span class=crashes><%= app.crashCount || 0 %></span></li>
+	<li>watchers:<span class=watchers><%= app.watchers || '' %></span></li>
+	<li>id:<span class=id><%= app.id %></span></li>
 </ul>
-<!-- we can't show/hide until buttons on the page, so assume a state -->
-<button class='control dodebug'>Debug</button>
-<button class='control donodebug' style=display:none>No Debug</button>
-<button class='control dorun'>Start</button>
-<button class='control dorestart' style=display:none>Restart</button>
-<button class='control dostop' style=display:none>Stop</button>
+<!-- we can't show/hide until buttons on the page, so assume state off -->
+<button class='control dodebug'
+<% if (app.state == 'debug') { %>style=display:none<% } %>
+>Debug</button>
+
+<button class='control donodebug'
+<% if (app.state != 'debug') { %>style=display:none<% } %>
+>No Debug</button>
+
+<button class='control dorun'
+<% if (app.state != 'stop') { %>style=display:none<% } %>
+>Start</button>
+
+<button class='control dorestart'
+<% if (app.state == 'stop') { %>style=display:none<% } %>
+>Restart</button>
+
+<button class='control dostop'
+<% if (app.state == 'stop') { %>style=display:none<% } %>
+>Stop</button>
 </div>

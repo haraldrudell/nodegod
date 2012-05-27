@@ -10,8 +10,8 @@ var godview = require('./routes/godview')
 
 // Configuration
 var app = module.exports = express.createServer()
-godcontrol.init(app, defaults, __dirname)
 godview.setTitle(defaults.init.appName)
+godcontrol.init(app, defaults, __dirname)
 app.configure(function(){
 	app.set('views', __dirname + '/views')
 	app.set('view engine', 'ejs')
