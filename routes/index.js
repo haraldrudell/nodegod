@@ -11,7 +11,10 @@ module.exports = {
 //
 var appName
 function index(req, res) {
-	res.render('index', { title: appName, layout: 'layout' })
+	res.render('index', {
+		title: appName,
+		apps: nodegod.getApps(),
+	})
 }
 
 function setTitle(title) {

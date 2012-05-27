@@ -2,12 +2,20 @@
 render one application provided in app
 -->
 <h2><%= app.name %></h2>
-<p>id: <%= app.id %>
-	<%= app.start %>
-	<%= app.currentState %>
-	<%= app.state %>
-	<%= app.watchFiles %>
-</p>
+
+<ul><% for (var prop in app ) {
+	if (typeof app[prop] == 'function' || prop == 'name')
+		continue;%>
+	<li><%= prop %>: 
+		<% if (prop == 'watchFiles') { var files = app[prop]
+			if (!files.length) { %>None<% } else { %>
+			<ul><% files.forEach(function(file) { %>
+				<li><%= file %></li>
+			<% }) %></ul>
+		<% } } else { %>
+		<%= app[prop] %><% } %>
+	</li><% } %>
+</ul>
 <!-- we can't show/hide until buttons on the page, so assume a state -->
 <button class=debug>Debug</button>
 <button class=nodebug style=display:none>No Debug</button>

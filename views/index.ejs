@@ -1,4 +1,4 @@
 <h1><%= title %></h1>
-<p>Rule the world of node:</p>
+<p>Rule the world of node!</p>
 <p id=status>Page loaded from server</p>
-<div class=apps></div>
+<% for (var app in apps) { %><%- partial('partials/app', { app: apps[app] }) %><% } %>

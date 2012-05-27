@@ -31,8 +31,8 @@ else $(function() {
 		case 'auth':
 			string = data.value === true ? 'Logged in' : data.value
 			break
-		case 'data':
-			string = 'Got value ' + data.value
+		case 'apps':
+			string = 'Got apps:' + data.apps
 			break
 		default:
 			string = 'Bad type from server:' + data.type
@@ -40,7 +40,7 @@ else $(function() {
 		$('#status').text(string)
 	}
 
-	SKYBRIDGE.socketSend = socketSend
+	NODEGOD.socketSend = socketSend
 	var socket
 	var connected
 
@@ -66,12 +66,12 @@ else $(function() {
 				connected = true
 				callback()
 			})
-			socket.on('togod', rxFunc)
+			socket.on('fromgod', rxFunc)
 		}
 	}
 
 	function socketSend(data) {
-		socket.emit('fromgod', data)
+		socket.emit('togod', data)
 	}
 
 })
