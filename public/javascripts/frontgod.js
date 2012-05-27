@@ -4,6 +4,20 @@ if (typeof NODEGOD == 'undefined') NODEGOD = {}
 
 if (typeof $ == 'undefined') alert ('jQuery is missing')
 else $(function() {
+	var actions = [ 'dodebug', 'donodebug', 'dostart', 'dorestart', 'dostop']
+
+
+	$('.control').click(function() {
+		var action = this.className.match(/\bdo([^ $]+)/)
+		if (action) {
+			action = action[0].substring(2)
+			var app = $(this).closest('div').attr('id')
+			if (app) {
+				app = app.substring(3)
+				messageToServer({ type: action, app: app})
+			}
+		}
+	})
 
 	messageToServer({ type: 'getApps'})
 
@@ -27,17 +41,25 @@ else $(function() {
 	function messageFromServer(data) {
 		var string
 
-		switch(data.type) {
-		case 'auth':
-			string = data.value === true ? 'Logged in' : data.value
-			break
-		case 'apps':
-			string = 'Got apps:' + data.apps
-			break
-		default:
-			string = 'Bad type from server:' + data.type
+		if (!data || !data.type) {
+			var text = JSON.stringify(data)
+			alert('corrupt comms:' + text)
+		} else {
+			switch(data.type) {
+			case 'auth':
+				string = data.value === true ? 'Logged in' : data.value
+				break
+			case 'apps':
+				string = 'Got apps:' + data.apps
+				break
+			case 'ok':
+				string = 'ok'
+				break
+			default:
+				string = 'Bad type from server:' + data.type
+			}
+			$('#status').text(string)
 		}
-		$('#status').text(string)
 	}
 
 	NODEGOD.socketSend = socketSend

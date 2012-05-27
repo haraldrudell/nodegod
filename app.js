@@ -5,15 +5,13 @@ var defaults = haraldops.init({ appName: 'Node God', path: __dirname, logger: co
 
 // https://github.com/visionmedia/express
 var express = require('express')
-var routes = require('./routes')
-var godsocket = require('./lib/godsocket')
-var nodegod = require('./lib/nodegod')
-nodegod.loadAppFiles(defaults, __dirname)
-routes.setTitle(defaults.init.appName)
+var godcontrol = require('./lib/godcontrol')
+var godview = require('./routes/godview')
 
 // Configuration
 var app = module.exports = express.createServer()
-godsocket(app)
+godcontrol.init(app, defaults, __dirname)
+godview.setTitle(defaults.init.appName)
 app.configure(function(){
 	app.set('views', __dirname + '/views')
 	app.set('view engine', 'ejs')
@@ -42,7 +40,7 @@ app.configure('production', function(){
 })
 
 // Routes
-app.get('/', routes.index)
+app.get('/', godview.index)
 
 /*3
 app.listen(defaults.PORT, function(){

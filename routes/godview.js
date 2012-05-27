@@ -1,7 +1,7 @@
 // index.js
 // views for nodegod
 
-var nodegod = require('../lib/nodegod')
+var godmodel = require('../lib/godmodel')
 
 module.exports = {
 	index: index,
@@ -13,7 +13,7 @@ var appName
 function index(req, res) {
 	res.render('index', {
 		title: appName,
-		apps: nodegod.getApps(),
+		apps: godmodel.getApps(),
 	})
 }
 

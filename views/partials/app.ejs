@@ -2,7 +2,7 @@
 render one application provided in app
 -->
 <h2><%= app.name %></h2>
-
+<div id=app<%= app.id %>>
 <ul><% for (var prop in app ) {
 	if (typeof app[prop] == 'function' || prop == 'name')
 		continue;%>
@@ -17,8 +17,9 @@ render one application provided in app
 	</li><% } %>
 </ul>
 <!-- we can't show/hide until buttons on the page, so assume a state -->
-<button class=debug>Debug</button>
-<button class=nodebug style=display:none>No Debug</button>
-<button class=start>Start</button>
-<button class=restart style=display:none>Restart</button>
-<button class=stop style=display:none>Stop</button>
+<button class='control dodebug'>Debug</button>
+<button class='control donodebug' style=display:none>No Debug</button>
+<button class='control dorun'>Start</button>
+<button class='control dorestart' style=display:none>Restart</button>
+<button class='control dostop' style=display:none>Stop</button>
+</div>
