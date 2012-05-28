@@ -82,6 +82,9 @@ else $(function() {
 				alert('corrupt comms:' + text)
 			} else {
 				switch(data.type) {
+				case 'denied':
+					string = 'Read-Only Mode'
+					break
 				case 'auth':
 					string = data.value === true ? 'Logged in' : data.value
 					break

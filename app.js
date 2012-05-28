@@ -50,7 +50,8 @@ app.listen(defaults.PORT, function(){
 })
 */
 app.listen(defaults.PORT, defaults.appInterface)
-console.log('Application %s on node %s available on port %d in %s mode',
+//app.listen(defaults.worldPort)
+console.log('Application %s on node %s available on port %s in %s mode',
 	defaults.init.appName,
 	process.version,
 	defaults.PORT,

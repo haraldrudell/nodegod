@@ -11,12 +11,23 @@ module.exports = {
 //
 var appName
 var launchTime
-function index(req, res) {
+function index(request, res) {
+
+	var socket = request.connection && request.connection.socket ||
+		request.socket
+
+	// client ip eg. '1.2.3.4'
+	var clientIp = socket && socket.remoteAddress ||
+			'?clientIp'
+
+	var readWrite = clientIp == '127.0.0.1'
+
 	var apps = godmodel.getApps()
 	res.render('index', {
 		title: appName,
 		apps: apps,
 		launch: launchTime,
+		readWrite: readWrite,
 	})
 }
 

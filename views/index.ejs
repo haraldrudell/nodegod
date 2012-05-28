@@ -1,5 +1,6 @@
 <h1><%= title %></h1>
 <p>Rule the world of node!</p>
+<% if (!readWrite) { %><h1 style=color:red>Read-Only Access</h1><% } %>
 <p> Written by <a href=http://www.haraldrudell.com>Harald Rudell</a></p>
 <p id=status>Page loaded from server</p>
 <% for (var app in apps) { %><%- partial('partials/app', { app: apps[app] }) %><% } %>
