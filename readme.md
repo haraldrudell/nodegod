@@ -9,6 +9,7 @@ Configured by JSON-files in the filesystem
 	* $HOME
 	* $HOME/apps
 	* the folder were Node God's app.js resides
+
 ```js
 {
 	"PORT": 1111,
@@ -35,6 +36,7 @@ Note: pids are stored at $HOME/tmp or the global temp folder
 		"watchFiles": [ "package.json", "app.js", "lib", "routes", "/home/foxyboy/apps/nodejs3.json" ]
 	}
 }
+```
 
 * Key: the identifier (computer-friendly string) used for this app, here "nodejs3." This is the name of the default deployment folder for this app
 * state: the initial state of the app: run/stop/debug
