@@ -1,9 +1,8 @@
 {
 	"name": "nodegod",
-	"description": "Use express 3, handlebars.js and provide compiled templates as external JavaScript",
+	"description": "Web interface to node apps, file watch and crash restart by Harald Rudell",
 	"author": "Harald Rudell <harald@allgoodapps.com> (http://www.haraldrudell.com",
 	"version": "0.0.1",
-	"private": true,
 	"contributors": [
 		{
 			"name": "Harald Rudell",
@@ -15,7 +14,6 @@
 		"express": "< 3",
 		"ejs": "",
 		"socket.io": "",
-		"ejsinbrowser": "",
 		"haraldops": ""
 	},
 	"scripts": {
