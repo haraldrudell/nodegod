@@ -1,0 +1,9 @@
+{
+	"nodejs3": {
+		"state": "run",
+		"name": "LinkedIn",
+		"watchFiles": [ "example.js" ],
+		"start": "/Users/foxyboy/Desktop/airfox/node/linkedin/example/example.js",
+		"folder": "/Users/foxyboy/Desktop/airfox/node/linkedin/example"
+	}
+}
