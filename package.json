@@ -2,7 +2,7 @@
 	"name": "nodegod",
 	"description": "Web interface to node apps, file watch and crash restart by Harald Rudell",
 	"author": "Harald Rudell <harald@allgoodapps.com> (http://www.haraldrudell.com",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"contributors": [
 		{
 			"name": "Harald Rudell",
@@ -17,6 +17,10 @@
 		"ejs": "",
 		"socket.io": "",
 		"haraldops": ""
+	},
+	"repository" : {
+		"type" : "git",
+		"url" : "https://haraldrudell@github.com/haraldrudell/nodegod.git"
 	},
 	"scripts": {
 		"start": "node app"

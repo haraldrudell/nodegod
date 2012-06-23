@@ -1,7 +1,9 @@
 // nodegod
 // keeps a number of node apps running
 var haraldops = require('haraldops')
-var defaults = haraldops.init({ appName: 'Node God', path: __dirname, logger: console.log })
+var defaults = haraldops.init({
+	appName: 'Node God', logger: console.log,
+	sessionSecret: 'veryGreat', PORT: 1111 })
 
 // https://github.com/visionmedia/express
 var express = require('express')
@@ -11,7 +13,7 @@ var godview = require('./routes/godview')
 // Configuration
 var app = module.exports = express.createServer()
 godview.setTitle(defaults.init.appName)
-godcontrol.init(app, defaults, __dirname)
+godcontrol.init(app, defaults)
 app.configure(function(){
 	app.set('views', __dirname + '/views')
 	app.set('view engine', 'ejs')
@@ -26,12 +28,14 @@ app.configure(function(){
 	app.use(app.router)
 	app.use(express.static(__dirname + '/public'))
 })
+/*
 require('ejsinbrowser').writeScript({
 	folder: app.settings.views,
 	ext: app.settings['view engine'],
 	jsGlobalVariable: 'NODEGOD',
 	templates: 'partials',
 	filename: __dirname + '/public/javascripts/templates.js'})
+*/
 app.configure('development', function(){
 	app.use(express.errorHandler({ dumpExceptions: true, showStack: true }))
 })

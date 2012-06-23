@@ -1,9 +1,6 @@
 {
-	"nodejs3": {
-		"state": "run",
-		"name": "LinkedIn",
-		"watchFiles": [ "example.js" ],
-		"start": "/Users/foxyboy/Desktop/airfox/node/linkedin/example/example.js",
-		"folder": "/Users/foxyboy/Desktop/airfox/node/linkedin/example"
+	"My Cool Node One-Liner": {
+		"start": [ "--eval", "setTimeout(false, 10000)" ],
+		"launchBrowser": "http://localhost:1111"
 	}
 }
