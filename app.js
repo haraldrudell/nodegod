@@ -1,5 +1,6 @@
-// nodegod
-// keeps a number of node apps running
+// Node God
+// keeps node apps running
+
 var haraldops = require('haraldops')
 var defaults = haraldops.init({
 	appName: 'Node God', logger: console.log,

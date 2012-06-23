@@ -1,7 +1,0 @@
-{
-	"PORT": 1111,
-	"haraldops": {
-	},
-	"appFiles": "apps.json",
-	"sessionSecret": "verygreat"
-}

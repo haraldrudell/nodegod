@@ -2,7 +2,7 @@
 	"name": "nodegod",
 	"description": "Web interface to node apps, file watch and crash restart by Harald Rudell",
 	"author": "Harald Rudell <harald@allgoodapps.com> (http://www.haraldrudell.com",
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"contributors": [
 		{
 			"name": "Harald Rudell",
