@@ -4,14 +4,13 @@ render one application provided in app
 <h2><%= app.name %></h2>
 <div id=app<%= app.id %>>
 <ul>
-	<li>state:<span class=state><%= app.state || '' %></span></li>
-	<li>pid:<span class=pid><%= app.pid || '' %></span></li>
-	<li>up since:<span class=upsince><%= app.lastLaunch ? new Date(app.lastLaunch) : '?' %></span></li>
-	<li>last exit code:<span class=exit><%= app.exitCode != null ? app.exitCode : '?' %></span></li>
-	<li>last crash:<span class=lastcrash><%= app.lastCrash ? new Date(app.lastCrash) : '?' %></span></li>
-	<li>crash Count:<span class=crashes><%= app.crashCount || 0 %></span></li>
-	<li>watchers:<span class=watchers><%= app.watchers || '' %></span></li>
-	<li>id:<span class=id><%= app.id %></span></li>
+	<li>State: <span class=state><%= app.state || '' %></span></li>
+	<li>Up since: <span class=upsince><%= dateString(app.lastLaunch) %></span></li>
+	<li>Crash count: <span class=crashes><%= app.crashCount || 0 %></span></li>
+	<li>Last crash: <span class=lastcrash><%= dateString(app.lastCrash) %></span></li>
+	<li>Last exit code: <span class=exit><%= app.exitCode != null ? app.exitCode : '?' %></span></li>
+	<li>Pid: <span class=pid><%= app.pid || '' %></span></li>
+	<li>Watchers: <span class=watchers><%= app.watchers || '' %></span></li>
 </ul>
 <!-- we can't show/hide until buttons on the page, so assume state off -->
 <button class='control dodebug'
