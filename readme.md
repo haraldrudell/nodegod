@@ -43,7 +43,13 @@ Note: pids are stored in a file at $HOME/tmp or the global temp folder
 ```js
 {
 	"Node.js #3": {
-		"watchFiles": [ "package.json", "app.js", "lib", "routes", "/home/foxyboy/apps/nodejs3.json" ]
+		"watchFiles": [
+			"package.json",
+			"app.js",
+			"lib",
+			"routes",
+			"/home/foxyboy/apps/nodejs3.json"
+		]
 	}
 }
 ```
@@ -57,10 +63,10 @@ Note: pids are stored in a file at $HOME/tmp or the global temp folder
 * launchBrowser: optional string: url for which a browser window is launched once
 
 # Features
-* Web frontend for managing any number of apps
-* App lifecycle management with states and transitions for run/stop/debug
-* App is automatically restarted unless it crashes in less than 3 seconds
-* If app state is crashed, watchers are still active so relaunch os attempted on file updates
-* File watchers restart the app after a 3 second delay, so that all file writes have time to complete
-* Ability to reload app configurations as files are added
-* If Node God crashes, it will relaunch managed apps on restart so that they become managed
+* Web frontend for managing any number of apps.
+* App lifecycle management with states and transitions for run/stop/debug.
+* App is automatically restarted unless it crashes in less than 3 seconds.
+* If app state is crashed, watchers are still active so that a relaunch attempt is done on each file update.
+* File watchers restart the app after a 3 second delay, so that all file writes have time to complete.
+* Ability to reload app configurations as files are added.
+* If Node God crashes, it will relaunch managed apps on restart so that they become managed.
