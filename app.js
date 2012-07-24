@@ -3,7 +3,7 @@
 
 var haraldops = require('haraldops')
 var defaults = haraldops.init({
-	appName: 'Node God', logger: console.log,
+	appName: 'Node God',
 	sessionSecret: 'veryGreat', PORT: 1111 })
 
 // https://github.com/visionmedia/express
