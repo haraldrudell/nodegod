@@ -6,7 +6,7 @@
 	<button class=reconnect>Reconnect</button>
  	&emsp;<span id=status>Page loaded from server</span>
 </p>
-<% for (var app in apps) { %><%- partial('partials/app', { app: apps[app] }) %><% } %>
+<% for (var app in apps) { %><%- partial('partials/app', { app: apps[app].getState() }) %><% } %>
 <button class='control reload'>Reload App Configuratons</button>
 <p>Node God up since: <%= dateString(launch) %>.</p>
 <p> Written by <a href=http://www.haraldrudell.com>Harald Rudell</a></p>
