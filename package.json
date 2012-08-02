@@ -1,16 +1,19 @@
 {
 	"name": "nodegod",
-	"description": "Web interface to node apps, file watch and crash restart by Harald Rudell",
-	"author": "Harald Rudell <harald@allgoodapps.com> (http://www.haraldrudell.com",
+	"description": "Web interface supervising node apps with dashboard and restart on file changes and exits by Harald Rudell",
+	"author": "Harald Rudell <harald@allgoodapps.com> (http://www.haraldrudell.com)",
 	"keywords": ["app", "management", "node", "operations"],
 	"version": "0.0.6",
 	"contributors": [
 		{
 			"name": "Harald Rudell",
 			"email": "harald@allgoodapps.com",
-			"web": "http://blog.haraldrudell.com"
+			"web": "http://www.haraldrudell.com"
 		}
 	],
+	"devDependencies": {
+		"nodeunit": ""
+	},
 	"dependencies": {
 		"ejsinbrowser": "",
 		"request": "",
@@ -25,6 +28,7 @@
 		"url" : "https://haraldrudell@github.com/haraldrudell/nodegod.git"
 	},
 	"scripts": {
-		"start": "node app"
+		"start": "node app",
+		"test": "nodeunit test"
 	}
 }

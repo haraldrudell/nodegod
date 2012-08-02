@@ -68,5 +68,5 @@ Note: pids are stored in a file at $HOME/tmp or the global temp folder
 * App is automatically restarted unless it crashes in less than 3 seconds.
 * If app state is crashed, watchers are still active so that a relaunch attempt is done on each file update.
 * File watchers restart the app after a 3 second delay, so that all file writes have time to complete.
-* Ability to reload app configurations as files are added.
-* If Node God crashes, it will relaunch managed apps on restart so that they become managed.
+* Ability to reload app configurations as apps are added.
+* If Node God crashes, it will relaunch managed apps on restart so that they again become managed.
