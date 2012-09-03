@@ -12,6 +12,8 @@
 		}
 	],
 	"devDependencies": {
+		"greatjson": "",
+		"uglify-js": "",
 		"nodeunit": ""
 	},
 	"dependencies": {
