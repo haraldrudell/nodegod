@@ -10,7 +10,7 @@ var haraldutil = require('haraldutil')
 var fs = require('fs')
 
 module.exports = {
-	testCopyTree: testCopyTree,
+//	testCopyTree: testCopyTree,
 }
 
 var slogan = path.basename(__filename, path.extname(__filename))
@@ -103,7 +103,7 @@ function clearFolderEntries(folder, cb) {
 				files.forEach(function (entry) {
 					var fq = path.join(folder, entry)
 					entryCounter.inc()
-					if (haraldutil.getType(fq)) {
+					if (haraldutil.getType(fq) === true) {
 						fs.unlink(fq, entryCounter.dec)
 					} else {
 						clearFolder(fq, true)
