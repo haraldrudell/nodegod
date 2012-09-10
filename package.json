@@ -3,7 +3,7 @@
 	"description": "Web interface supervising node apps with dashboard and restart on file changes and exits by Harald Rudell",
 	"author": "Harald Rudell <harald@allgoodapps.com> (http://www.haraldrudell.com)",
 	"keywords": ["app", "management", "node", "operations"],
-	"version": "0.0.7",
+	"version": "0.0.8",
 	"contributors": [
 		{
 			"name": "Harald Rudell",
