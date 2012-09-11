@@ -25,6 +25,7 @@ function index(request, res) {
 	var apps = godmodel.getApps()
 	res.render('index', {
 		title: appName,
+		host: require('os').hostname(),
 		apps: apps,
 		launch: launchTime,
 		readWrite: readWrite,

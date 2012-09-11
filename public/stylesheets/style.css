@@ -1,11 +1,104 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+/* Node God limited styling */
+
+body { /* padding around content, default font */
+	position: relative; /* make mastheadstick to this element */
+	margin: 0;
+	/*margin-left: 1em;*/
+	/*margin-top: 1em;*/
+	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+.masthead { /* div always stuck at top left */
+}
+
+.header {
+	position: fixed; /* make fixed on page */
+	width: 100%; /* full page width */
+	height: 6em;
+	background-color: #fff5d6;
+	padding: 1em;
+	border-bottom: 2px solid gray;
+}
+
+.title > * {
+	display: inline;
+	margin-right: 2em;
+}
+
+.header p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.topcontrols > * {
+	display: inline;
+	margin-right: 2em;
+}
+
+.content {
+	padding-top: 8em;
+	padding-bottom: 2em;
+	padding-left: 1em;
+}
+.apps { /* the container for the vertical app list */
+	min-height: 2in;
+}
+
+.anapp {
+	padding: 0.25em 1em 0.25em 1em;
+	border-radius: 1em;
+	border-width: 0px 2px 1px 2px;
+	border-style: solid;
+	 border-color: gray;
+}
+
+.footer {
+	position: fixed; /*  */
+	bottom: 0; /* at bottom of view */
+	border-top: 2px solid gray;
+	padding-left: 1em;
+	width: 100%;
+	height: 2em;
+	background-color: #fff5d6;
+	/*vertical-align: middle;*/
+}
+
+.footer:after {
+	content: '';
+	display: inline-block;
+	height: 100%;
+	vertical-align: middle;
+	/*margin-right: -0.25em; /* Adjusts for spacing */
+}
+
+.footermiddle {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.footermiddle p {
+	display: inline;
+	margin-right: 2em;
+}
+
+/* per app */
+.appcolumn {
+	display: inline-block;
+	vertical-align: top;
+}
+
+.appcolumn div {
+	margin-bottom: 0.5em;
+}
+
+ul {
+	margin-top: 0;
 }
 
 a {
-  color: #00B7FF;
+	color: #00B7FF;
 }
+
 /*
 #status {
 	border: 1px solid black;

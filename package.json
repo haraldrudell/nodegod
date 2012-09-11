@@ -2,8 +2,13 @@
 	"name": "nodegod",
 	"description": "Web interface supervising node apps with dashboard and restart on file changes and exits by Harald Rudell",
 	"author": "Harald Rudell <harald@allgoodapps.com> (http://www.haraldrudell.com)",
-	"keywords": ["app", "management", "node", "operations"],
-	"version": "0.0.8",
+	"keywords": [
+		"app",
+		"management",
+		"node",
+		"operations"
+	],
+	"version": "0.0.9",
 	"contributors": [
 		{
 			"name": "Harald Rudell",
@@ -12,25 +17,28 @@
 		}
 	],
 	"devDependencies": {
-		"greatjson": ">= 0.0.8",
-		"uglify-js": "",
-		"nodeunit": ""
+		"mochawrapper": "*"
 	},
 	"dependencies": {
-		"ejsinbrowser": "*",
+		"greatjson": ">= 0.0.8",
 		"request": "*",
-		"express": "< 3",
-		"ejs": "*",
 		"socket.io": "*",
 		"haraldutil": ">= 0.1.5",
+		"ejsinbrowser": "*",
+		"ejs": "*",
+		"express": "< 3",
+		"apprunner": "*",
 		"haraldops": ">= 0.1.3"
 	},
-	"repository" : {
-		"type" : "git",
-		"url" : "https://haraldrudell@github.com/haraldrudell/nodegod.git"
+	"repository": {
+		"type": "git",
+		"url": "https://haraldrudell@github.com/haraldrudell/nodegod.git"
 	},
 	"scripts": {
 		"start": "node app",
-		"test": "nodeunit test"
+		"test": "mocha --ui exports --reporter spec",
+		"monitor": "mocha --ui exports --reporter min --watch",
+		"debugtest": "mocha --debug-brk --ui exports --reporter spec",
+		"coverage": "mochacoverage"
 	}
 }

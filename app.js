@@ -1,18 +1,24 @@
 // Node God
 // keeps node apps running
 
-var haraldops = require('haraldops')
-var defaults = haraldops.init({
-	appName: 'Node God',
-	sessionSecret: 'veryGreat', PORT: 1111 })
+var defaults = require('haraldops').init({appName: 'Node God',
+	appFolder: __dirname,
+	sessionSecret: 'veryGreat',
+	PORT: 1111 })
 
 // https://github.com/visionmedia/express
 var express = require('express')
+var apprunner = require('apprunner')
+apprunner.enableAnomalyMail(false)
+var cbc = apprunner.getCbCounter(/*{callback: initAppResult}*/)
+
+// get app and start error listener
+var app = module.exports = express.createServer()
+apprunner.initApp(defaults, app, cbc.add(initAppResult))
 var godcontrol = require('./lib/godcontrol')
 var godview = require('./routes/godview')
 
 // Configuration
-var app = module.exports = express.createServer()
 godview.setTitle(defaults.init.appName)
 godcontrol.init(app, defaults)
 app.configure(function(){
@@ -54,6 +60,10 @@ app.listen(defaults.PORT, function(){
 		app.settings.env)
 })
 */
+
+function initAppResult(err) {
+	if (err) throw err
+}
 app.listen(defaults.PORT, defaults.appInterface)
 //app.listen(defaults.worldPort)
 console.log('Application %s on node %s available on port %s in %s mode',

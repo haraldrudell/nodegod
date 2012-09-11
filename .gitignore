@@ -1,3 +1,4 @@
 /node_modules
 /test/data/tofolder
 /test/data/tofolder2
+/*-cov

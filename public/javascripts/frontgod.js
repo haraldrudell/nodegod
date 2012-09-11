@@ -19,7 +19,7 @@ if (typeof $ == 'undefined') alert ('jQuery is missing')
 			var action = this.className.match(/\bdo([^ $]+)/)
 			var app
 			if (action) {
-				var app = $(this).closest('div').attr('id')
+				var app = $(this).parent().parent().parent().attr('id')
 				if (app) app = app.substring(3)
 			} else {
 				action = this.className.match(/\b(reload)($|\s)/)
@@ -35,6 +35,7 @@ if (typeof $ == 'undefined') alert ('jQuery is missing')
 		})
 
 		updateState() // state when page is loaded
+		updateColors()
 
 	})
 
@@ -69,6 +70,8 @@ if (typeof $ == 'undefined') alert ('jQuery is missing')
 		}
 	}
 
+	var crashMap = {}
+
 	function updateCreateApp(app) {
 		var div = $('#app' + app.id)
 		if (!div) $('#status').text('Unknown app:' + app.id)
@@ -93,7 +96,42 @@ if (typeof $ == 'undefined') alert ('jQuery is missing')
 			div.find('.lastcrash').text(dateString(app.lastCrash))
 			div.find('.crashes').text(app.crashCount || 0)
 			div.find('.exit').text(app.exitCode != null ? app.exitCode : '?')
+			div.find('.port').text(app.port)
+			div.find('.url').text(app.url)
+			div.find('.urlhref').attr('href', app.url)
+			updateColors()
 		}
+	}
+
+	function updateColors() {
+		// key: id, value: true if crashed
+		var newCrashMap = {}
+		// key: id, value: container div for app
+		var elMap = {}
+		// overall state
+		newCrashMap.all = false
+		elMap.all = $('.header')
+		var stateList = $('.state')
+		stateList.each(function (index, el) {
+			var jEl = $(el)
+			var container = jEl.parent().parent()
+			var id = container.attr('id')
+			var isCrashed = jEl.text() == 'crash'
+			newCrashMap[id] = isCrashed
+			if (isCrashed) newCrashMap.all = true
+			elMap[id] = container
+		})
+
+		// update all changed apps
+		var bad = 'background-color:#ffb3b3'
+		for (var id in newCrashMap) {
+			var isCrash = newCrashMap[id]
+			if (isCrash != crashMap[id]) {
+				elMap[id].attr('style', isCrash ? bad : '')
+			}
+		}
+
+		crashMap = newCrashMap
 	}
 
 	var timezoneMinutesOffUtc = -new Date().getTimezoneOffset()
