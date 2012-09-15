@@ -1,6 +1,6 @@
 # Node God
 
-[![alt Nodegod Screen Shot](./images/nodegod.png)]
+[![alt Nodegod Screen Shot](./nodegod/images/nodegod.png)]
 
 Node God launches node applications, restarts them on crash or file updates and produces a shared log.
 
