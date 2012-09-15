@@ -71,6 +71,7 @@ if (typeof $ == 'undefined') alert ('jQuery is missing')
 	}
 
 	var crashMap = {}
+	var haveACrash = false
 
 	function updateCreateApp(app) {
 		var div = $('#app' + app.id)
@@ -108,7 +109,7 @@ if (typeof $ == 'undefined') alert ('jQuery is missing')
 		var newCrashMap = {}
 		// key: id, value: container div for app
 		var elMap = {}
-		// overall state
+		// overall state: true means crashed
 		newCrashMap.all = false
 		elMap.all = $('.header')
 		var stateList = $('.state')
@@ -121,17 +122,33 @@ if (typeof $ == 'undefined') alert ('jQuery is missing')
 			if (isCrashed) newCrashMap.all = true
 			elMap[id] = container
 		})
+		haveACrash = newCrashMap.all
+
+		// merge in connection state
+		if (!isConnected()) newCrashMap.all = true
 
 		// update all changed apps
-		var bad = 'background-color:#ffb3b3'
 		for (var id in newCrashMap) {
 			var isCrash = newCrashMap[id]
 			if (isCrash != crashMap[id]) {
-				elMap[id].attr('style', isCrash ? bad : '')
+				setElementColor(elMap[id], isCrash)
 			}
 		}
 
 		crashMap = newCrashMap
+	}
+
+	function updateTopColor() {
+		var bad = haveACrash || !isConnected()
+		if (bad != crashMap.all) setElementColor($('.header'), crashMap.all = bad)
+	}
+
+	function isConnected() {
+		return getState() == 2
+	}
+
+	function setElementColor(el, isBad) {
+		el.attr('style', isBad ? 'background-color:#ffb3b3' : '')
 	}
 
 	var timezoneMinutesOffUtc = -new Date().getTimezoneOffset()
@@ -228,6 +245,7 @@ if (typeof $ == 'undefined') alert ('jQuery is missing')
 			reconnectEnable(newState != 2)
 			//$('.connected').text()
 			$('#status').text(texts[newState] + ' at ' + dateString(Date.now()))
+			updateTopColor()
 		}
 	}
 	function reconnectEnable(flag) {
