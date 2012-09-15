@@ -1,5 +1,8 @@
 # Node God
-Launches node applications, restarts them on crash or file updates, produces a shared log.
+
+[![alt Nodegod Screen Shot](./images/nodegod.png)]
+
+Node God launches node applications, restarts them on crash or file updates and produces a shared log.
 
 # Run as demo
 
