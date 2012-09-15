@@ -9,7 +9,7 @@ var defaults = require('haraldops').init({appName: 'Node God',
 // https://github.com/visionmedia/express
 var express = require('express')
 var apprunner = require('apprunner')
-apprunner.enableAnomalyMail(false)
+//apprunner.enableAnomalyMail(false)
 var cbc = apprunner.getCbCounter(/*{callback: initAppResult}*/)
 
 // get app and start error listener
