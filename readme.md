@@ -1,8 +1,30 @@
 # Node God
 
+Node God manages node applications, restarts them on crash and produces a shared log.
+
 ![alt Nodegod Screen Shot](https://raw.github.com/haraldrudell/nodegod/master/images/nodegod.png)
 
-Node God launches node applications, restarts them on crash or file updates and produces a shared log.
+# Benefits
+
+1. **Monitor** a handful of apps on a handful of servers as you work on them
+2. **Immediate glance**: the top bar goes red if any app is in crash state or the connection is lost
+3. **Focus** on your current app by scrolling it into view
+4. **No command line.** Ever.
+
+# Features
+
+1. Launch and **lifecycle management** of any number of apps
+2. **Browser interface** supporting remote machines over ssh tunnel
+3. Websocket communication for **real-time** updates
+4. Command queue and application state and transitions for **run/stop/debug**.
+5. **Restarts** apps automatically until crash within 3 seconds.
+6. If app state is crashed, **file watchers** are still active so that a relaunch attempt is made on file update.
+7. File watchers restart the app after a 1 second idle time, so that all file writes have time to complete.
+8. Ability to reload app configurations as apps are added.
+9. If Node God crashes, it will relaunch managed apps on restart so that they again become managed.
+10. USRSIG2 signal for **graceful shutdown**, implemented by [App Runner](https://github.com/haraldrudell/apprunner)
+11. Aggregation of stdout from many apps to a **common log**.
+12. Fetch of port and url from the app so **direct link** can be displayed in the ui.
 
 # Run as demo
 
@@ -65,11 +87,10 @@ Note: pids are stored in a file at $HOME/tmp or the global temp folder
 * watchFiles: optional string or array of Strings: filenames and folders to watch. If any file changes the app is restarted
 * launchBrowser: optional string: url for which a browser window is launched once
 
-# Features
-* Web frontend for managing any number of apps.
-* App lifecycle management with states and transitions for run/stop/debug.
-* App is automatically restarted unless it crashes in less than 3 seconds.
-* If app state is crashed, watchers are still active so that a relaunch attempt is done on each file update.
-* File watchers restart the app after a 3 second delay, so that all file writes have time to complete.
-* Ability to reload app configurations as apps are added.
-* If Node God crashes, it will relaunch managed apps on restart so that they again become managed.
+# Notes
+
+(c) [Harald Rudell](http://www.haraldrudell.com) wrote this for node in June, 2012
+
+No warranty expressed or implied. Use at your own risk.
+
+Please suggest better ways, new features, and possible difficulties on [github](https://github.com/haraldrudell/nodegod)
