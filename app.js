@@ -2,30 +2,34 @@
 // master process for nodegod
 // © Harald Rudell 2012
 
-var establish = require('./lib/master/establish')
+var processfinder = require('./lib/master/processfinder')
 var uimanager = require('./lib/master/uimanager')
 // http://nodejs.org/api/path.html
 var path = require('path')
 
-var theSignal = 'SIGUSR2'
-var marker = path.basename(__filename, path.extname(__filename))
-var fileId = marker + ':' + process.pid
+var interMasterSignal = 'SIGUSR2'
+var appIndentifier = 'nodegodmaster'
+var processName = appIndentifier + ':' + process.pid
 
 // determine if this process should launch ui
-console.log(fileId, 'starting')
-process.on(theSignal, uimanager.signalHandler)
+console.log(processName, 'starting master candidate at', (new Date).toISOString())
+process.on(interMasterSignal, uimanager.interMasterSignalHandler)
 process.on('uncaughtException', processException)
-establish.establish(marker, theSignal, masterResult)
+
+processfinder.isProcessMaster(appIndentifier, interMasterSignal, masterResult)
 
 function masterResult(isMaster) {
-	if (isMaster) {
-		console.log(fileId, 'launching ui process')
-		uimanager.launchUi(fileId, __dirname)
-	} else console.log(fileId, 'notified the master process')
+	if (isMaster === true) { // we need to launch the Web ui
+		console.log(processName, 'confirmed master: launching ui process')
+		uimanager.launchUi(processName, 'webprocess')
+	} else { // there is already another nodegod master running, it will launch the web ui
+		console.log(processName, 'exiting: notified existing master, process id:', isMaster)
+	}
 }
 
+// uncaught exception in this master process: output all information to log
 function processException() {
-	console.log(marker, 'uncaughtException')
+	console.log(processName, 'uncaughtException')
 	Array.prototype.slice.call(arguments).forEach(function (value, index) {
 		console.log(index + ': ', value)
 		if (value instanceof Error && value.stack) console.log(value.stack)
