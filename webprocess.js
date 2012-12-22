@@ -67,8 +67,9 @@ function initAppResult(err) {
 }
 app.listen(defaults.PORT, defaults.appInterface)
 //app.listen(defaults.worldPort)
-console.log('Application %s on node %s available on port %s in %s mode',
+console.log('Application %s on port %s node %s express %s %s mode',
 	defaults.init.appName,
-	process.version,
 	defaults.PORT,
+	process.version,
+	express.version,
 	app.settings.env)
