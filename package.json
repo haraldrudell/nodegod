@@ -8,7 +8,7 @@
 		"node",
 		"operations"
 	],
-	"version": "0.0.11",
+	"version": "0.1.0",
 	"contributors": [
 		{
 			"name": "Harald Rudell",
@@ -40,5 +40,6 @@
 		"monitor": "mocha --ui exports --reporter min --watch",
 		"debugtest": "mocha --debug-brk --ui exports --reporter spec",
 		"coverage": "mochacoverage"
-	}
+	},
+	"engines": { "node": ">= 0.8.0" }
 }

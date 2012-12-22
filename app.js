@@ -1,73 +1,33 @@
-// Node God
-// keeps node apps running
+// master.js
+// master process for nodegod
+// © Harald Rudell 2012
 
-var defaults = require('haraldops').init({appName: 'Node God',
-	appFolder: __dirname,
-	sessionSecret: 'veryGreat',
-	PORT: 1111 })
+var establish = require('./lib/master/establish')
+var uimanager = require('./lib/master/uimanager')
+// http://nodejs.org/api/path.html
+var path = require('path')
 
-// https://github.com/visionmedia/express
-var express = require('express')
-var apprunner = require('apprunner')
-//apprunner.enableAnomalyMail(false)
-var cbc = apprunner.getCbCounter(/*{callback: initAppResult}*/)
+var theSignal = 'SIGUSR2'
+var marker = path.basename(__filename, path.extname(__filename))
+var fileId = marker + ':' + process.pid
 
-// get app and start error listener
-var app = module.exports = express.createServer()
-apprunner.initApp(defaults, app, cbc.add(initAppResult))
-var godcontrol = require('./lib/godcontrol')
-var godview = require('./routes/godview')
+// determine if this process should launch ui
+console.log(fileId, 'starting')
+process.on(theSignal, uimanager.signalHandler)
+process.on('uncaughtException', processException)
+establish.establish(marker, theSignal, masterResult)
 
-// Configuration
-godview.setTitle(defaults.init.appName)
-godcontrol.init(app, defaults)
-app.configure(function(){
-	app.set('views', __dirname + '/views')
-	app.set('view engine', 'ejs')
-//3	app.use(express.favicon())
-	app.use(express.bodyParser())
-//3	app.use(express.methodOverride())
-//3	app.use(express.cookieParser(defaults.sessionSecret))
-	app.use(express.cookieParser())
-//3	app.use(express.session())
-	app.use(express.session({ secret: defaults.sessionSecret }))
-	app.use(express.methodOverride())
-	app.use(app.router)
-	app.use(express.static(__dirname + '/public'))
-})
-/*
-require('ejsinbrowser').writeScript({
-	folder: app.settings.views,
-	ext: app.settings['view engine'],
-	jsGlobalVariable: 'NODEGOD',
-	templates: 'partials',
-	filename: __dirname + '/public/javascripts/templates.js'})
-*/
-app.configure('development', function(){
-	app.use(express.errorHandler({ dumpExceptions: true, showStack: true }))
-})
-app.configure('production', function(){
-	app.use(express.errorHandler())
-})
-
-// Routes
-app.get('/', godview.index)
-
-/*3
-app.listen(defaults.PORT, function(){
-	console.log("Express server listening on port %d in %s mode",
-		defaults.PORT,
-		app.settings.env)
-})
-*/
-
-function initAppResult(err) {
-	if (err) throw err
+function masterResult(isMaster) {
+	if (isMaster) {
+		console.log(fileId, 'launching ui process')
+		uimanager.launchUi(fileId, __dirname)
+	} else console.log(fileId, 'notified the master process')
 }
-app.listen(defaults.PORT, defaults.appInterface)
-//app.listen(defaults.worldPort)
-console.log('Application %s on node %s available on port %s in %s mode',
-	defaults.init.appName,
-	process.version,
-	defaults.PORT,
-	app.settings.env)
+
+function processException() {
+	console.log(marker, 'uncaughtException')
+	Array.prototype.slice.call(arguments).forEach(function (value, index) {
+		console.log(index + ': ', value)
+		if (value instanceof Error && value.stack) console.log(value.stack)
+	})
+}
