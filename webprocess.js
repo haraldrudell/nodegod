@@ -11,11 +11,11 @@ var express = require('express')
 // https://github.com/haraldrudell/apprunner
 var apprunner = require('apprunner')
 //apprunner.enableAnomalyMail(false)
-var cbc = apprunner.getCbCounter(/*{callback: initAppResult}*/)
+var cbCounter = 2 // background+initApp
 
 // get app and start error listener
 var app = module.exports = express.createServer()
-apprunner.initApp(defaults, app, cbc.add(initAppResult))
+apprunner.initApp(defaults, app, initAppResult)
 var godcontrol = require('./lib/godcontrol')
 var godview = require('./routes/godview')
 
