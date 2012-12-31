@@ -2,7 +2,6 @@
 // keeps node apps running
 //require('./lib/masterlink')
 var defaults = require('haraldops').init({appName: 'Node God',
-	appFolder: __dirname,
 	sessionSecret: 'veryGreat',
 	PORT: 1111 })
 
