@@ -10,7 +10,7 @@ module.exports = {
 
 //
 var appName
-var launchTime
+var launchTime = Date.now()
 function index(request, res) {
 
 	var socket = request.connection && request.connection.socket ||
@@ -33,9 +33,9 @@ function index(request, res) {
 	})
 }
 
-function setTitle(title) {
-	appName = title
-	launchTime  = Date.now()
+function setTitle(title, launchTime0) {
+	if (title) appName = title
+	if (launchTime0) launchTime = launchTime0
 }
 // pacific time adjusted for daylight savings
 var timezoneMinutesOffUtc = isDs(new Date()) ? -420 : -480
