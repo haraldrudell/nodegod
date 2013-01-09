@@ -2,7 +2,6 @@
 // © Harald Rudell 2012
 
 var appconduit = require('../lib/master/appconduit')
-var testedModule = appconduit
 
 var logger = require('../lib/master/logger')
 
@@ -12,39 +11,26 @@ var child_process = require('child_process')
 // https://github.com/haraldrudell/mochawrapper
 var assert = require('mochawrapper')
 
-var exportsCount = 5
-var testedModuleType = 'object'
-var exportsTypes = {}
-
 var sp = child_process.spawn
-var cl = console.log
 var pk = process.kill
-var al = logger.addLogging
+var al = logger.logChild
 
 exports['AppConduit:'] = {
 	'Exports': function () {
-
-		// if export count changes, we need to write more tests
-		assert.equal(typeof testedModule, testedModuleType, 'Module type incorrect')
-		assert.equal(Object.keys(testedModule).length, exportsCount, 'Export count changed')
-
-		// all exports function
-		for (var exportName in testedModule) {
-			var actual = typeof testedModule[exportName]
-			var expected = exportsTypes[exportName] || 'function'
-			assert.equal(actual, expected, 'Incorrect type of export ' + exportName)
-		}
+		assert.exportsTest(appconduit, 5)
 	},
 	'SetLaunchData': function() {
-		console.log = function () {}
 		appconduit.setLaunchData('PROC', 5)
-		console.log = cl
 	},
 	'UiConnect': function() {
 		appconduit.uiConnect(5)
 	},
 	'UiDisConnect': function() {
 		appconduit.uiDisconnect()
+	},
+	'GetState': function() {
+		var actual = appconduit.getState()
+		assert.ok(actual)
 	},
 	'ReceiveFromUi Empty Message': function() {
 		var message = {a: 1}
@@ -55,11 +41,9 @@ exports['AppConduit:'] = {
 
 		assert.deepEqual(aData, eData)
 
-		// no Ipc
-		appconduit.uiDisconnect()
-		console.log = function () {}
+		appconduit.uiDisconnect() // No ipc pipes to log
+		appconduit.setLaunchData('PROC', 5, function () {}) // set log to nothing
 		appconduit.receiveFromUi(message)
-		console.log = cl
 	},
 	'ReceiveFromUi GetMap': function() {
 		var message = {getMap: true}
@@ -92,7 +76,7 @@ exports['AppConduit:'] = {
 		appconduit.uiConnect(function (d) {aData.push(d)})
 		var aLogger = []
 		var eLogger = [[child, message.app]]
-		logger.addLogging = function (child, appName) {aLogger.push([child, appName])}
+		logger.logChild = function (child, appName) {aLogger.push([child, appName])}
 		var aOn = {}
 		var eOn = ['exit']
 		child.on = function (e, f) {aOn[e]=f; return this}
@@ -220,8 +204,7 @@ exports['AppConduit:'] = {
 	},
 	'after': function() {
 		child_process.spawn = sp
-		console.log = cl
 		process.kill = pk
-		logger.addLogging = al
+		logger.logChild = al
 	},
 }

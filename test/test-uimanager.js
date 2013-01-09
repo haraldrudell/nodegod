@@ -2,7 +2,6 @@
 // © Harald Rudell 2012
 
 var uimanager = require('../lib/master/uimanager')
-var testedModule = uimanager
 
 var logger = require('../lib/master/logger')
 var appconduit = require('../lib/master/appconduit')
@@ -14,30 +13,15 @@ var path = require('path')
 // https://github.com/haraldrudell/mochawrapper
 var assert = require('mochawrapper')
 
-var exportsCount = 2
-var testedModuleType = 'object'
-var exportsTypes = {}
-
 var sp = child_process.spawn
 var sese = appconduit.setLaunchData
-var al = logger.addLogging
+var al = logger.logChild
 var uc = appconduit.uiConnect
-var cl = console.log
 var pk = process.kill
 
 exports['UiManager:'] = {
 	'Exports': function () {
-
-		// if export count changes, we need to write more tests
-		assert.equal(typeof testedModule, testedModuleType, 'Module type incorrect')
-		assert.equal(Object.keys(testedModule).length, exportsCount, 'Export count changed')
-
-		// all exports function
-		for (var exportName in testedModule) {
-			var actual = typeof testedModule[exportName]
-			var expected = exportsTypes[exportName] || 'function'
-			assert.equal(actual, expected, 'Incorrect type of export ' + exportName)
-		}
+		assert.exportsTest(uimanager, 2)
 	},
 	'GetUiRelauncher': function() {
 		var actual = uimanager.getUiRelauncher()
@@ -65,14 +49,12 @@ exports['UiManager:'] = {
 		child_process.spawn = function mockSpawn(c, a, o) {aSpawn.push([c, a, o]); return child}
 		var aLog = []
 		var eLog = [[child, 'ui']]
-		logger.addLogging = function (c, s) {aLog.push([c, s])}
+		logger.logChild = function (c, s) {aLog.push([c, s])}
 		var aUiConnect = []
 		appconduit.uiConnect = function (f) {aUiConnect.push(f)}
 		var aException = []
 		var restartIntercept = function (e) {aException.push(e)}
-		console.log = function () {}
-		uimanager.launchUi(processName, uiModuleName, restartIntercept)
-		console.log = cl
+		uimanager.launchUi({processName: processName, uiModuleName: uiModuleName, restartIntercept: restartIntercept, log: function () {}})
 
 		assert.deepEqual(aException, [], 'launchUi exceptions')
 		assert.ok(aLaunchData[0])
@@ -103,9 +85,7 @@ exports['UiManager:'] = {
 			[child.pid, undefined],
 		]
 		process.kill = processKill
-		console.log = function () {}
 		killUi()
-		console.log = cl
 
 		function processKill(pid, sig) {
 			aKill.push([pid, sig])
@@ -117,9 +97,7 @@ exports['UiManager:'] = {
 			var exitCode = 56
 			var aRemove = 0
 			child.removeListener = function (e, f) {aRemove++; return this}
-			console.log = function () {}
 			aOn.exit(exitCode)
-			console.log = cl
 
 			assert.ok(aRemove)
 
@@ -130,9 +108,8 @@ exports['UiManager:'] = {
 	'after': function() {
 		child_process.spawn = sp
 		appconduit.setLaunchData = sese
-		logger.addLogging = al
+		logger.logChild = al
 		appconduit.uiConnect = uc
-		console.log = cl
 		process.kill = pk
 	},
 }

@@ -10,26 +10,11 @@ var net = require('net')
 // https://github.com/haraldrudell/mochawrapper
 var assert = require('mochawrapper')
 
-var exportsCount = 2
-var testedModuleType = 'object'
-var exportsTypes = {}
-
 var cn = net.connect
-var cl = console.log
 
 exports['PidGetter:'] = {
 	'Exports': function () {
-
-		// if export count changes, we need to write more tests
-		assert.equal(typeof testedModule, testedModuleType, 'Module type incorrect')
-		assert.equal(Object.keys(testedModule).length, exportsCount, 'Export count changed')
-
-		// all exports function
-		for (var exportName in testedModule) {
-			var actual = typeof testedModule[exportName]
-			var expected = exportsTypes[exportName] || 'function'
-			assert.equal(actual, expected, 'Incorrect type of export ' + exportName)
-		}
+		assert.exportsTest(pidgetter, 2)
 	},
 	'GetPidFromPort': function() {
 		var opts = {
@@ -54,7 +39,7 @@ exports['PidGetter:'] = {
 		var aDestroy = 0
 		var aWrite = []
 		var aOn = {}
-		var eEvents = ['timeout', 'data', 'close']
+		var eEvents = ['timeout', 'data', 'close', 'error']
 		var aCb = []
 
 		// basic invocation
@@ -124,6 +109,5 @@ exports['PidGetter:'] = {
 	},
 	'after': function() {
 		net.connect = cn
-		console.log = cl
 	},
 }

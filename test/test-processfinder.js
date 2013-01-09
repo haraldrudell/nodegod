@@ -2,7 +2,6 @@
 // © Harald Rudell 2012
 
 var processfinder = require('../lib/master/processfinder')
-var testedModule = processfinder
 
 var masterserver = require('../lib/master/masterserver')
 var pidgetter = require('../lib/master/pidgetter')
@@ -10,32 +9,18 @@ var pidgetter = require('../lib/master/pidgetter')
 // https://github.com/haraldrudell/mochawrapper
 var assert = require('mochawrapper')
 
-var exportsCount = 2
-var testedModuleType = 'object'
-var exportsTypes = {}
-
 var ms = masterserver.MasterServer
 var gpp = pidgetter.getPidFromPort
-var cl = console.log
 
 exports['ProcessFinder:'] = {
 	'Exports': function () {
-
-		// if export count changes, we need to write more tests
-		assert.equal(typeof testedModule, testedModuleType, 'Module type incorrect')
-		assert.equal(Object.keys(testedModule).length, exportsCount, 'Export count changed')
-
-		// all exports function
-		for (var exportName in testedModule) {
-			var actual = typeof testedModule[exportName]
-			var expected = exportsTypes[exportName] || 'function'
-			assert.equal(actual, expected, 'Incorrect type of export ' + exportName)
-		}
+		assert.exportsTest(processfinder, 2)
 	},
 	'IsProcessMaster': function() {
 		var opts = {
 			port: 21,
 			interface: 'INTERFACE',
+			log: function () {},
 		}
 		var aOn = {}
 		var eEvents = ['connect', 'fail', 'error', 'end', 'data']
@@ -64,22 +49,21 @@ exports['ProcessFinder:'] = {
 		assert.strictEqual(aCb[0], true)
 
 		// error
-		console.log = function () {}
 		aOn['error']({})
-		console.log = cl
 
 		// end
-		console.log = function () {}
 		aOn['end']()
-		console.log = cl
 
 		// fail
+		var eGetPid = [[{
+			port: opts.port,
+			host: opts.interface,
+		}]]
 		var aGetPid = []
 		pidgetter.getPidFromPort = mockGetPid
 		aOn['fail']()
-		assert.equal(aGetPid.length, 1)
-		assert.equal(aGetPid[0][0], opts.port)
-		assert.equal(typeof aGetPid[0][1], 'function')
+		assert.equal(typeof (eGetPid[0][1] = aGetPid[0] && aGetPid[0][1]), 'function')
+		assert.deepEqual(aGetPid, eGetPid)
 
 		function mockGetPid(port, cb) {
 			aGetPid.push([port, cb])
@@ -95,11 +79,9 @@ exports['ProcessFinder:'] = {
 
 		var value = {}
 		aCb = []
-		console.log = function () {}
 		hazMasterPid(value)
-		console.log = cl
 		assert.equal(aCb.length, 1)
-		assert.equal(aCb[0], 0)
+		assert.equal(aCb[0], value)
 
 		// data
 		var aReset = 0
@@ -110,6 +92,5 @@ exports['ProcessFinder:'] = {
 	'after': function() {
 		masterserver.MasterServer = ms
 		pidgetter.getPidFromPort = gpp
-		console.log = cl
 	},
 }
