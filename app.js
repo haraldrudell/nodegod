@@ -40,12 +40,14 @@ function processUncaughtExceptionListener() {
 	log(processName, 'uncaughtException')
 	var text = []
 	Array.prototype.slice.call(arguments).forEach(function (value, index) {
-		var line = []
+		var valuePoints = []
 		var type = typeof value
 		if (value && value.constructor && value.constructor.name) type += ':' + value.constructor.name
-		line.push('arg#:', index, 'type:', type, 'value:', value)
-		if (value && value.stack) line.push('stack:', value.stack)
-		text.push(line.join(' '))
+		valuePoints.push(['arg#:', index].join(' '))
+		valuePoints.push(['type:', type].join(' '))
+		valuePoints.push(['value:', value].join(' '))
+		if (value && value.stack) valuePoints.push(['stack:', value.stack].join(' '))
+		text.push(valuePoints.join(', '))
 	})
 	log(text.join('\n'))
 }

@@ -2,8 +2,11 @@
 // © Harald Rudell 2012
 
 var processfinder = require('../lib/master/processfinder')
+
 var uimanager = require('../lib/master/uimanager')
 var rotatedlogger = require('../lib/master/rotatedlogger')
+// http://nodejs.org/api/path.html
+var path = require('path')
 
 // https://github.com/haraldrudell/mochawrapper
 var assert = require('mochawrapper')
@@ -13,16 +16,14 @@ var sru = processfinder.setResetUi
 var ipm = processfinder.isProcessMaster
 var lui = uimanager.launchUi
 var gur = uimanager.getUiRelauncher
-
 var lg = rotatedlogger.log
 
 exports['App:'] = {
 	'IsNotMaster ProcessException SIGINT IsMaster': function() {
 
-
 		// execute is not master
 		var aOn = {}
-		var eOn = ['uncaughtException', 'SIGUSR2', 'SIGINT']
+		var eOn = ['uncaughtException', 'SIGUSR2', 'SIGINT', 'SIGHUP']
 		process.on = function (e, f) {aOn[e] = f; return this}
 		var aIsProcessMaster = []
 		var eIsProcessMaster = [[{port: 1113, interface: '127.0.0.1', processName: 0}, 'cb']]
@@ -51,23 +52,26 @@ exports['App:'] = {
 
 		// execute is master
 		var masterResult = aIsProcessMaster[0][1]
+
 		process.on = function () {}
 		processfinder.isProcessMaster = function (o, cb) {cb(true)}
+
 		var uiRelauncher = 5
 		uimanager.getUiRelauncher = function () {return uiRelauncher}
+
 		var aReset = []
 		var eReset = [uiRelauncher]
 		processfinder.setResetUi = function (f) {aReset.push(f)}
+
 		var aLaunchUi = []
-		var eLaunchUi = [{uiModuleName: 'webprocess'}]
+		var eLaunchUi = [{processName: 'x', launchArray: ['node', path.join(__dirname, '..', 'webprocess')], log: 'x'}]
 		uimanager.launchUi = function (opts) {aLaunchUi.push(opts)}
 		masterResult(true)
 
 		assert.deepEqual(aReset, eReset)
-		assert.equal(aLaunchUi.length, 1)
-		assert.equal(typeof aLaunchUi[0].log, 'function')
-		assert.equal(typeof aLaunchUi[0].processName, 'string')
-		assert.equal(aLaunchUi[0].uiModuleName, 'webprocess')
+		assert.equal(typeof (eLaunchUi[0].processName = aLaunchUi[0] && aLaunchUi[0].processName), 'string')
+		assert.equal(typeof (eLaunchUi[0].log = aLaunchUi[0] && aLaunchUi[0].log), 'function')
+		assert.deepEqual(aLaunchUi, eLaunchUi)
 	},
 	'after': function() {
 		process.on = on

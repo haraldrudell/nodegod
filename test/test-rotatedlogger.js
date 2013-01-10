@@ -22,28 +22,33 @@ exports['RotatedLogger:'] = {
 		var actual = rotatedlogger.init()
 		assert.ok(actual)
 	},
-	'Write': function () {
-		var value = '123'
-		var eValue = value + '\n'
+	'Write Log': function () {
+		var value = ['value: %s', 123]
+		var eValue = 'value: ' + value[1] + '\n'
 
 		var aWrite = []
 		var eWrite = [eValue, eValue]
 		function mockWrite(x) {aWrite.push(x)}
 
 		var aOn = {}
+		var eOn = ['error']
 		function mockOn(e, f) {aOn[e] = f; return this}
 		fs.createWriteStream = function mockCreateWriteStream(x) {return {on: mockOn, write: mockWrite}}
 
-		var aTe = 0
-		perioder.TimeEmitter = function MockTimeEmitter() {this.on = function () {}; aTe++}
-
+		var aTOn = []
+		var eTOn = ['time']
+		perioder.TimeEmitter = function MockTimeEmitter() {this.on = function (e, f) {aTOn[e] = f}}
 
 		process.stdout.write = mockWrite
-		rotatedlogger.log(value)
+		rotatedlogger.init({logToFile: true})
+		rotatedlogger.log(value[0], value[1])
 		process.stdout.write = wr
+
 		assert.deepEqual(aWrite, eWrite)
-		assert.ok(aTe)
-		assert.equal(typeof aOn.error, 'function')
+		assert.deepEqual(Object.keys(aOn).sort(), eOn.sort())
+		for (var e in aOn) assert.equal(typeof aOn[e], 'function')
+		assert.deepEqual(Object.keys(aTOn).sort(), eTOn.sort())
+		for (var e in aTOn) assert.equal(typeof aTOn[e], 'function')
 	},
 	'after': function () {
 		process.stdout.write = wr

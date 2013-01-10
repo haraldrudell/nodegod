@@ -31,7 +31,7 @@ exports['UiManager:'] = {
 
 		// launch
 		var processName = 'PROCESS_NAME'
-		var uiModuleName = 'UI_MODULE_NAME'
+		var launchArray = ['EXECUTABLE', 'ARGUMENT']
 		var aLaunchData = []
 		var eLaunchData = [[processName, 0]]
 		appconduit.setLaunchData = function (p, u) {aLaunchData.push([p, u])}
@@ -42,9 +42,9 @@ exports['UiManager:'] = {
 		var child = {pid:17, on: onFn, once: onFn, send: childSend}
 		var aSpawn = []
 		var eSpawn = [[
-			'node',
-			[path.join(path.dirname(require && require.main && require.main.filename), uiModuleName)],
-			{stdio: ['ignore', 'pipe', 'pipe', 'ipc']},
+			launchArray[0],
+			launchArray.slice(1),
+			{detached: true, stdio: ['ignore', 'pipe', 'pipe', 'ipc']},
 		]]
 		child_process.spawn = function mockSpawn(c, a, o) {aSpawn.push([c, a, o]); return child}
 		var aLog = []
@@ -54,7 +54,7 @@ exports['UiManager:'] = {
 		appconduit.uiConnect = function (f) {aUiConnect.push(f)}
 		var aException = []
 		var restartIntercept = function (e) {aException.push(e)}
-		uimanager.launchUi({processName: processName, uiModuleName: uiModuleName, restartIntercept: restartIntercept, log: function () {}})
+		uimanager.launchUi({processName: processName, launchArray: launchArray, restartIntercept: restartIntercept, log: function () {}})
 
 		assert.deepEqual(aException, [], 'launchUi exceptions')
 		assert.ok(aLaunchData[0])

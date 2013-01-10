@@ -56,16 +56,6 @@ exports['AppConduit:'] = {
 		eData[0].launchTime = aData[0].launchTime
 		assert.deepEqual(aData, eData)
 	},
-	'ReceiveFromUi Launch Non-Array': function() {
-		// launch non-array
-		var message = {app: 'APP', launch: true}
-		var aData = []
-		var eData = [{error: 'Bad launch command', isConfig: true, message: {app: message.app}}]
-		appconduit.uiConnect(function (d) {aData.push(d)})
-		appconduit.receiveFromUi(message)
-
-		assert.deepEqual(aData, eData)
-	},
 	'ReceiveFromUi Launch': function(done) {
 
 		// launch
@@ -84,7 +74,7 @@ exports['AppConduit:'] = {
 		var eSpawn = [[
 			message.launch[0],
 			[message.launch[1]],
-			['ignore', 'pipe', 'pipe'],
+			{detached: true, stdio: ['ignore', 'pipe', 'pipe']},
 		]]
 		child_process.spawn = function (command, args, options) {aSpawn.push([command, args, options]); return child}
 		appconduit.receiveFromUi(message)
@@ -201,6 +191,16 @@ exports['AppConduit:'] = {
 		var eMap = {map:{}}
 		var aMap = appconduit.getState()
 		assert.deepEqual(aMap, eMap)
+	},
+	'ReceiveFromUi Launch Non-Array': function() {
+		// launch non-array
+		var message = {app: 'APP', launch: true}
+		var aData = []
+		var eData = [{error: 'Bad launch command', isConfig: true, message: {app: message.app}}]
+		appconduit.uiConnect(function (d) {aData.push(d)})
+		appconduit.receiveFromUi(message)
+
+		assert.deepEqual(aData, eData)
 	},
 	'after': function() {
 		child_process.spawn = sp
