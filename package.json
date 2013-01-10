@@ -8,7 +8,7 @@
 		"node",
 		"operations"
 	],
-	"version": "0.1.4",
+	"version": "0.1.5",
 	"contributors": [
 		{
 			"name": "Harald Rudell",
@@ -17,18 +17,18 @@
 		}
 	],
 	"devDependencies": {
-		"mochawrapper": "*"
+		"mochawrapper": ">= 0.0.34"
 	},
 	"dependencies": {
-		"greatjson": ">= 0.0.8",
 		"request": "*",
 		"socket.io": "*",
-		"haraldutil": ">= 0.1.5",
 		"ejsinbrowser": "*",
 		"ejs": "*",
 		"express": "< 3",
-		"apprunner": "*",
-		"haraldops": ">= 0.1.3"
+		"greatjson": ">= 0.0.8",
+		"apprunner": ">= 0.1.6",
+		"haraldops": ">= 0.1.9",
+		"haraldutil": ">= 0.1.15"
 	},
 	"repository": {
 		"type": "git",
@@ -41,5 +41,5 @@
 		"debugtest": "mocha --debug-brk --ui exports --reporter spec",
 		"coverage": "mochacoverage"
 	},
-	"engines": { "node": ">= 0.8.0" }
+	"engines": {"node": ">= 0.8.0"}
 }

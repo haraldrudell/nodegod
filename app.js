@@ -11,7 +11,7 @@ var path = require('path')
 var appIndentifier = 'nodegodmaster'
 var port = 1113
 var interface = '127.0.0.1'
-var ignoredSignals = ['SIGINT', 'SIGUSR2']
+var ignoredSignals = ['SIGINT', 'SIGUSR2', 'SIGHUP']
 var launchArray = ['node'/*, '--debug-brk'*/, path.join(__dirname, 'webprocess')]
 
 var processName = appIndentifier + ':' + process.pid
@@ -38,10 +38,16 @@ function masterResult(isMaster) {
 
 function processUncaughtExceptionListener() {
 	log(processName, 'uncaughtException')
+	var text = []
 	Array.prototype.slice.call(arguments).forEach(function (value, index) {
-		log(index + ': ', value)
-		if (value instanceof Error && value.stack) console.log(value.stack)
+		var line = []
+		var type = typeof value
+		if (value && value.constructor && value.constructor.name) type += ':' + value.constructor.name
+		line.push('arg#:', index, 'type:', type, 'value:', value)
+		if (value && value.stack) line.push('stack:', value.stack)
+		text.push(line.join(' '))
 	})
+	log(text.join('\n'))
 }
 
 function getSignalHandler(signal) {
