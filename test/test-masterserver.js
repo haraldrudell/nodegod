@@ -48,13 +48,18 @@ exports['MasterServer:'] = {
 		var eEvents = ['error', 'close']
 		var aRListener = 0
 		var aOn = {}
+		var ignoreProperties = ['domain', '_events', '_maxListeners']
 
 		// constructor
 		net.createServer = function (f) {aCreate.push(f); return server}
 		var masterServer = new masterserver.MasterServer(port, interface)
 
 		assert.ok(masterServer instanceof events.EventEmitter)
-		assert.equal(Object.keys(masterServer).length, 2)
+		var keys = []
+		Object.keys(masterServer).forEach(function (p) {
+			if (!~ignoreProperties.indexOf(p)) keys.push(p)
+		})
+		assert.equal(keys.length, 2, 'List is: ' + keys)
 		assert.equal(typeof masterServer.shutdown, 'function')
 		assert.equal(typeof masterServer.isUp, 'function')
 		assert.equal(aCreate.length, 1)

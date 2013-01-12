@@ -11,9 +11,15 @@ exports['Perioder:'] = {
 		assert.exportsTest(perioder, 1)
 	},
 	'TimeEmitter GetState Cancel': function () {
+		var ignoreProperties = ['domain', '_events', '_maxListeners']
+
 		var t = new perioder.TimeEmitter() // timer for beginning of the month
 		assert.ok(t)
-		assert.equal(Object.keys(t).length, 2)
+		var keys = []
+		Object.keys(t).forEach(function (p) {
+			if (!~ignoreProperties.indexOf(p)) keys.push(p)
+		})
+		assert.equal(keys.length, 2, 'List is: ' + keys)
 		assert.equal(typeof t.cancel, 'function')
 		assert.equal(typeof t.getState, 'function')
 
