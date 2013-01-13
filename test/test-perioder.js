@@ -32,6 +32,7 @@ exports['Perioder:'] = {
 		assert.equal(actual2.timer, false)
 	},
 	'Fire': function (done) {
+		var isDone
 		var t = new perioder.TimeEmitter({
 			schedule: 'second',
 			every: 0.001,	// then every ms
@@ -39,8 +40,10 @@ exports['Perioder:'] = {
 
 		function time() {
 			t.cancel()
-
-			done()
+			if (!isDone) {
+				isDone = true
+				done()
+			}
 		}
 	},
 	'TimeEmitter Every NaN': function () {
