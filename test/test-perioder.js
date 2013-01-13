@@ -34,8 +34,7 @@ exports['Perioder:'] = {
 	'Fire': function (done) {
 		var t = new perioder.TimeEmitter({
 			schedule: 'second',
-			at: 0, // immediately
-			every: 10,	// then every 10 seconds
+			every: 0.001,	// then every ms
 		}).on('time', time)
 
 		function time() {
