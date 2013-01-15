@@ -5,10 +5,14 @@
 	"keywords": [
 		"app",
 		"management",
+		"forever",
+		"supervisor",
 		"node",
+		"sysadmin",
+		"tools",
 		"operations"
 	],
-	"version": "0.2.2",
+	"version": "0.2.3",
 	"contributors": [
 		{
 			"name": "Harald Rudell",
@@ -26,7 +30,7 @@
 		"ejs": "*",
 		"express": "< 3",
 		"greatjson": ">= 0.0.8",
-		"apprunner": ">= 0.1.6",
+		"apprunner": ">= 0.2.2",
 		"haraldops": ">= 0.1.9",
 		"haraldutil": ">= 0.1.15"
 	},

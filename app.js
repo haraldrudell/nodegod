@@ -1,61 +1,11 @@
 // app.js
-// master process for nodegod
+// Nodegod manages apps
 // © Harald Rudell 2012
 
-var rotatedlogger = require('./lib/master/rotatedlogger')
-var processfinder = require('./lib/master/processfinder')
-var uimanager = require('./lib/master/uimanager')
-// http://nodejs.org/api/path.html
-var path = require('path')
-
-var appIndentifier = 'nodegodmaster'
-var port = 1113
-var interface = '127.0.0.1'
-var ignoredSignals = ['SIGINT', 'SIGUSR2', 'SIGHUP']
-var launchArray = ['node'/*, '--debug-brk'*/, path.join(__dirname, 'webprocess')]
-
-var processName = appIndentifier + ':' + process.pid
-var log = rotatedlogger.log
-var launchTime = (new Date).toISOString()
-
-// determine if this process should launch ui
-log(processName, 'starting master candidate at', launchTime)
-process.on('uncaughtException', processUncaughtExceptionListener)
-ignoredSignals.forEach(function (signal) {
-	process.on(signal, getSignalHandler(signal))
+require('./lib/master/nodegodmaster').run({
+	port: 1113,
+	interface: '127.0.0.1',
+	ignoredSignals: ['SIGINT', 'SIGUSR2', 'SIGHUP'],
+	appIndentifier: 'nodegodmaster',
+	launchArray: ['node', require('path').join(__dirname, 'webprocess')],
 })
-processfinder.isProcessMaster({port: port, interface: interface, processName: processName, log: log}, masterResult)
-function masterResult(isMaster) {
-	if (isMaster === true) { // we need to launch the Web ui
-		rotatedlogger.init({logToFile: true, logFile: appIndentifier}) // start writing to the logFile
-		log(processName, 'is master: launching ui', launchTime)
-		processfinder.setResetUi(uimanager.getUiRelauncher())
-		uimanager.launchUi({processName: processName, launchArray: launchArray, log: log})
-	} else if (typeof isMaster == 'number' && isMaster) { // there is already another nodegod master running, it will launch the web ui
-		log(processName, 'exiting: notified existing master with process id:', isMaster)
-	} else log(processName, 'failure communicating with exiting master:', isMaster instanceof Error ? isMaster.message : isMaster)
-}
-
-function processUncaughtExceptionListener() {
-	log(processName, 'uncaughtException')
-	var text = []
-	Array.prototype.slice.call(arguments).forEach(function (value, index) {
-		var valuePoints = []
-		var type = typeof value
-		if (value && value.constructor && value.constructor.name) type += ':' + value.constructor.name
-		valuePoints.push(['arg#:', index].join(' '))
-		valuePoints.push(['type:', type].join(' '))
-		valuePoints.push(['value:', value].join(' '))
-		if (value && value.stack) valuePoints.push(['stack:', value.stack].join(' '))
-		text.push(valuePoints.join(', '))
-	})
-	log(text.join('\n'))
-}
-
-function getSignalHandler(signal) {
-	return notifySignal
-
-	function notifySignal() {
-		log(processName, 'ignoring:', signal)
-	}
-}
