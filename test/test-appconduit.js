@@ -20,7 +20,7 @@ exports['AppConduit:'] = {
 		assert.exportsTest(appconduit, 5)
 	},
 	'SetLaunchData': function() {
-		appconduit.setLaunchData('PROC', 5)
+		appconduit.setLaunchData({rlog: {log: 1}})
 	},
 	'UiConnect': function() {
 		appconduit.uiConnect(5)
@@ -42,18 +42,21 @@ exports['AppConduit:'] = {
 		assert.deepEqual(aData, eData)
 
 		appconduit.uiDisconnect() // No ipc pipes to log
-		appconduit.setLaunchData('PROC', 5, function () {}) // set log to nothing
+		appconduit.setLaunchData({rlog: {log: function () {}}}) // set log to nothing
 		appconduit.receiveFromUi(message)
 	},
 	'ReceiveFromUi GetMap': function() {
 		var message = {getMap: true}
+
+		var masterLaunch = 7
+		appconduit.setLaunchData({masterLaunch: masterLaunch, rlog: {log: 1}}) // set log to nothing
+
 		var aData = []
-		var eData = [{appMap: {}, launchTime: 5}]
+		var eData = [{appMap: {}, launchTime: masterLaunch}]
 		appconduit.uiConnect(function (d) {aData.push(d)})
+
 		appconduit.receiveFromUi(message)
 
-		assert.equal(typeof (aData[0] && aData[0].launchTime), 'number')
-		eData[0].launchTime = aData[0].launchTime
 		assert.deepEqual(aData, eData)
 	},
 	'ReceiveFromUi Launch': function(done) {

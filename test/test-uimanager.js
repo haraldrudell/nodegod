@@ -28,18 +28,28 @@ exports['UiManager:'] = {
 		assert.equal(typeof actual, 'function')
 	},
 	'LaunchUi': function(done) {
-
-		// launch
 		var processName = 'PROCESS_NAME'
+		var mockLogger = {
+			log: function () {},
+			configure: function () {},
+			write: function () {},
+		}
 		var launchArray = ['EXECUTABLE', 'ARGUMENT']
+
 		var aLaunchData = []
-		var eLaunchData = [[processName, 0]]
-		appconduit.setLaunchData = function (p, u) {aLaunchData.push([p, u])}
+		var eLaunchData = [{
+			processName: processName,
+			masterLaunch: 0,
+			rlog: mockLogger,
+		}]
+		appconduit.setLaunchData = function (o) {aLaunchData.push(o)}
+
 		var aOn = {}
 		var eOn = ['exit', 'message', 'disconnect']
 		var onFn = function (e, f) {aOn[e] = f; return this}
 		var childSend = function () {throw new Error('nimp')}
 		var child = {pid:17, on: onFn, once: onFn, send: childSend}
+
 		var aSpawn = []
 		var eSpawn = [[
 			launchArray[0],
@@ -47,18 +57,21 @@ exports['UiManager:'] = {
 			{detached: true, stdio: ['ignore', 'pipe', 'pipe', 'ipc']},
 		]]
 		child_process.spawn = function mockSpawn(c, a, o) {aSpawn.push([c, a, o]); return child}
+
 		var aLog = []
 		var eLog = [[child, 'ui']]
 		logger.logChild = function (c, s) {aLog.push([c, s])}
+
 		var aUiConnect = []
 		appconduit.uiConnect = function (f) {aUiConnect.push(f)}
+
 		var aException = []
 		var restartIntercept = function (e) {aException.push(e)}
-		uimanager.launchUi({processName: processName, launchArray: launchArray, restartIntercept: restartIntercept, log: function () {}})
+
+		uimanager.launchUi({processName: processName, launchArray: launchArray, restartIntercept: restartIntercept, rlog: mockLogger})
 
 		assert.deepEqual(aException, [], 'launchUi exceptions')
-		assert.ok(aLaunchData[0])
-		assert.equal(typeof (eLaunchData[0][1] = aLaunchData[0][1]), 'number')
+		assert.equal(typeof (eLaunchData[0].masterLaunch = aLaunchData[0] && aLaunchData[0].masterLaunch), 'number')
 		assert.deepEqual(aLaunchData, eLaunchData)
 		assert.deepEqual(Object.keys(aOn).sort(), eOn.sort())
 		for (var e in aOn) assert.equal(typeof aOn[e], 'function')

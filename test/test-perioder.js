@@ -1,7 +1,7 @@
 // test-perioder.js
-// © Harald Rudell 2013
+// © Harald Rudell 2013 MIT License
 
-var perioder = require('../lib/master/perioder')
+var perioder = require('../lib/perioder')
 
 // https://github.com/haraldrudell/mochawrapper
 var assert = require('mochawrapper')

@@ -1,28 +1,69 @@
 // test-rotatedlogger.js
-// © Harald Rudell 2013
+// © Harald Rudell 2013 MIT License
 
-var rotatedlogger = require('../lib/master/rotatedlogger')
-
-var perioder = require('../lib/master/perioder')
-// http://nodejs.org/docs/latest/api/fs.html
-var fs = require('fs')
+var rotatedlogger = require('../lib/rotatedlogger')
+var rotatedstream = require('../lib/rotatedstream')
 
 // https://github.com/haraldrudell/mochawrapper
 var assert = require('mochawrapper')
 
 var wr = process.stdout.write
-var cws = fs.createWriteStream
-var te = perioder.TimeEmitter
+rs = rotatedstream.RotatedStream
 
 exports['RotatedLogger:'] = {
 	'Exports': function () {
-		assert.exportsTest(rotatedlogger, 3)
+		assert.exportsTest(rotatedlogger, 1)
 	},
-	'Init': function () {
-		var actual = rotatedlogger.init()
+	'Construction': function () {
+		var actual = new rotatedlogger.RotatedLog()
 		assert.ok(actual)
 	},
-	'Write Log': function () {
+	'Configure': function () {
+		var opts = {
+			stdout: false,
+			file: true,
+			streamOpts: 'OPTS',
+			filename: 'FILE',
+		}
+
+		rotatedstream.RotatedStream = function mockRotatedStream() {
+			this.once = function mockOn() {return this}
+			this.writable = true
+			this.filename = opts.filename
+		}
+		var instance = new rotatedlogger.RotatedLog()
+		instance.configure(opts)
+
+		var actual = instance.configure()
+
+		assert.deepEqual(actual, opts)
+	},
+	'Write Close': function () {
+		var str = 'STR'
+
+		var aWrite = []
+		var eWrite = [str, str]
+		function mockWrite(x) {aWrite.push(x)}
+
+		var aClose = 0
+		rotatedstream.RotatedStream = function mockRotatedStream() {
+			this.once = function mockOn() {return this}
+			this.write = mockWrite
+			this.writable = true
+			this.close = function mockClose() {aClose++}
+		}
+
+		var instance = new rotatedlogger.RotatedLog({file: true})
+		process.stdout.write = mockWrite
+		instance.write(str)
+		process.stdout.write = wr
+
+		assert.deepEqual(eWrite, aWrite)
+
+		instance.close()
+		assert.ok(aClose)
+	},
+	'Log': function () {
 		var value = ['value: %s', 123]
 		var eValue = 'value: ' + value[1] + '\n'
 
@@ -30,29 +71,21 @@ exports['RotatedLogger:'] = {
 		var eWrite = [eValue, eValue]
 		function mockWrite(x) {aWrite.push(x)}
 
-		var aOn = {}
-		var eOn = ['error']
-		function mockOn(e, f) {aOn[e] = f; return this}
-		fs.createWriteStream = function mockCreateWriteStream(x) {return {on: mockOn, write: mockWrite}}
+		rotatedstream.RotatedStream = function mockRotatedStream() {
+			this.once = function mockOn() {return this}
+			this.write = mockWrite
+			this.writable = true
+		}
 
-		var aTOn = []
-		var eTOn = ['time']
-		perioder.TimeEmitter = function MockTimeEmitter() {this.on = function (e, f) {aTOn[e] = f}}
-
+		var instance = new rotatedlogger.RotatedLog({file: true})
 		process.stdout.write = mockWrite
-		rotatedlogger.init({logToFile: true})
-		rotatedlogger.log(value[0], value[1])
+		instance.log.apply(instance, value)
 		process.stdout.write = wr
 
-		assert.deepEqual(aWrite, eWrite)
-		assert.deepEqual(Object.keys(aOn).sort(), eOn.sort())
-		for (var e in aOn) assert.equal(typeof aOn[e], 'function')
-		assert.deepEqual(Object.keys(aTOn).sort(), eTOn.sort())
-		for (var e in aTOn) assert.equal(typeof aTOn[e], 'function')
+		assert.deepEqual(eWrite, aWrite)
 	},
 	'after': function () {
 		process.stdout.write = wr
-		fs.createWriteStream = cws
-		perioder.TimeEmitter = te
+		rotatedstream.RotatedStream = rs
 	},
 }
