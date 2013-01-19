@@ -1,14 +1,13 @@
-// test-appentity.js
+// test-nodegodweb.js
 // © Harald Rudell 2012 MIT License
 
-var appentity = require('../lib/appentity')
+var nodegodweb = require('../lib/nodegodweb')
 
 // https://github.com/haraldrudell/mochawrapper
 var assert = require('mochawrapper')
-
-exports['AppEntity'] = {
+exports['NodegodWeb'] = {
 	'Exports': function () {
-		assert.exportsTest(appentity, 2)
+		assert.exportsTest(nodegodweb, 1)
 	},
 	'TODO': function () {
 	},

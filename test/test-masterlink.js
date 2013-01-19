@@ -1,14 +1,14 @@
-// test-godmodel.js
+// test-masterlink.js
 // © Harald Rudell 2013 MIT License
 
-var godmodel = require('../lib/godmodel')
+var masterlink = require('../lib/masterlink')
 
 // https://github.com/haraldrudell/mochawrapper
 var assert = require('mochawrapper')
 
-exports['GodModel'] = {
+exports['MasterLink:'] = {
 	'Exports': function () {
-		assert.exportsTest(godmodel, 4)
+		assert.exportsTest(masterlink, 4)
 	},
 	'TODO': function () {
 	},

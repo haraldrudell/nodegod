@@ -1,8 +1,7 @@
 // test-pidgetter.js
-// © Harald Rudell 2013
+// © Harald Rudell 2013 MIT License
 
 var pidgetter = require('../lib/master/pidgetter')
-var testedModule = pidgetter
 
 // http://nodejs.org/api/net.html
 var net = require('net')

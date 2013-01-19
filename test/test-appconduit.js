@@ -1,9 +1,9 @@
 // test-appconduit.js
-// © Harald Rudell 2012
+// © Harald Rudell 2012 MIT License
 
 var appconduit = require('../lib/master/appconduit')
 
-var logger = require('../lib/master/logger')
+var streamlabeller = require('../lib/master/streamlabeller')
 
 // http://nodejs.org/api/child_process.html
 var child_process = require('child_process')
@@ -13,7 +13,7 @@ var assert = require('mochawrapper')
 
 var sp = child_process.spawn
 var pk = process.kill
-var al = logger.logChild
+var al = streamlabeller.logChild
 
 exports['AppConduit:'] = {
 	'Exports': function () {
@@ -69,7 +69,7 @@ exports['AppConduit:'] = {
 		appconduit.uiConnect(function (d) {aData.push(d)})
 		var aLogger = []
 		var eLogger = [[child, message.app]]
-		logger.logChild = function (child, appName) {aLogger.push([child, appName])}
+		streamlabeller.logChild = function (child, appName) {aLogger.push([child, appName])}
 		var aOn = {}
 		var eOn = ['exit']
 		child.on = function (e, f) {aOn[e]=f; return this}
@@ -208,6 +208,6 @@ exports['AppConduit:'] = {
 	'after': function() {
 		child_process.spawn = sp
 		process.kill = pk
-		logger.logChild = al
+		streamlabeller.logChild = al
 	},
 }

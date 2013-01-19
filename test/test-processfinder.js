@@ -1,5 +1,5 @@
 // test-processfinder.js
-// © Harald Rudell 2012
+// © Harald Rudell 2012 MIT License
 
 var processfinder = require('../lib/master/processfinder')
 

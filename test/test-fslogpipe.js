@@ -1,14 +1,14 @@
-// test-godmodel.js
+// test-fslogpipe.js
 // © Harald Rudell 2013 MIT License
 
-var godmodel = require('../lib/godmodel')
+var fslogpipe = require('../lib/fslogpipe')
 
 // https://github.com/haraldrudell/mochawrapper
 var assert = require('mochawrapper')
 
-exports['GodModel'] = {
+exports['FsLogPipe:'] = {
 	'Exports': function () {
-		assert.exportsTest(godmodel, 4)
+		assert.exportsTest(fslogpipe, 1)
 	},
 	'TODO': function () {
 	},

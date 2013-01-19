@@ -1,6 +1,6 @@
 // test-package.js
 // tests your package consistency using a test from mochawrapper
-// © Harald Rudell 2012
+// © Harald Rudell 2012 MIT License
 
 var testpackage = require('mochawrapper').packagetests
 

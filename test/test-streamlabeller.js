@@ -1,14 +1,14 @@
-// test-logger.js
-// © Harald Rudell 2013
+// test-streamlabeller.js
+// © Harald Rudell 2013 MIT License
 
-var logger = require('../lib/master/logger')
+var streamlabeller = require('../lib/master/streamlabeller')
 
 // https://github.com/haraldrudell/mochawrapper
 var assert = require('mochawrapper')
 
 exports['Logger:'] = {
 	'Exports': function () {
-		assert.exportsTest(logger, 2)
+		assert.exportsTest(streamlabeller, 2)
 	},
 	'LogChild LogSocket': function() {
 		var aOn = {}
@@ -28,7 +28,7 @@ exports['Logger:'] = {
 		var slogan = 'SLOGAN'
 
 		// addLogging
-		logger.logChild(child, slogan, write)
+		streamlabeller.logChild(child, slogan, write)
 		assert.equal(Object.keys(aOn).length, eOn.length)
 		eOn.forEach(function (anEvent) {
 			assert.equal(typeof aOn[anEvent], 'function')

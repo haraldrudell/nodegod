@@ -1,9 +1,9 @@
 // test-uimanager.js
-// © Harald Rudell 2012
+// © Harald Rudell 2012 MIT License
 
 var uimanager = require('../lib/master/uimanager')
 
-var logger = require('../lib/master/logger')
+var logger = require('../lib/master/streamlabeller')
 var appconduit = require('../lib/master/appconduit')
 // http://nodejs.org/api/child_process.html
 var child_process = require('child_process')
@@ -28,9 +28,9 @@ exports['UiManager:'] = {
 		assert.equal(typeof actual, 'function')
 	},
 	'LaunchUi': function(done) {
-		var processName = 'PROCESS_NAME'
+		var launchTime = 7
 		var mockLogger = {
-			log: function () {},
+			pLog: function () {},
 			configure: function () {},
 			write: function () {},
 		}
@@ -38,8 +38,7 @@ exports['UiManager:'] = {
 
 		var aLaunchData = []
 		var eLaunchData = [{
-			processName: processName,
-			masterLaunch: 0,
+			masterLaunch: launchTime,
 			rlog: mockLogger,
 		}]
 		appconduit.setLaunchData = function (o) {aLaunchData.push(o)}
@@ -68,10 +67,9 @@ exports['UiManager:'] = {
 		var aException = []
 		var restartIntercept = function (e) {aException.push(e)}
 
-		uimanager.launchUi({processName: processName, launchArray: launchArray, restartIntercept: restartIntercept, rlog: mockLogger})
+		uimanager.launchUi({launchArray: launchArray, restartIntercept: restartIntercept, rlog: mockLogger, launchTime: launchTime})
 
 		assert.deepEqual(aException, [], 'launchUi exceptions')
-		assert.equal(typeof (eLaunchData[0].masterLaunch = aLaunchData[0] && aLaunchData[0].masterLaunch), 'number')
 		assert.deepEqual(aLaunchData, eLaunchData)
 		assert.deepEqual(Object.keys(aOn).sort(), eOn.sort())
 		for (var e in aOn) assert.equal(typeof aOn[e], 'function')

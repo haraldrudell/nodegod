@@ -2,6 +2,7 @@
 // © Harald Rudell 2013 MIT License
 
 var rotatedlogger = require('../lib/rotatedlogger')
+
 var rotatedstream = require('../lib/rotatedstream')
 
 // https://github.com/haraldrudell/mochawrapper

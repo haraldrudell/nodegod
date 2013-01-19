@@ -1,5 +1,5 @@
 // test-appstate.js
-// © Harald Rudell 2012
+// © Harald Rudell 2012 MIT License
 
 var appstate = require('../lib/appstate')
 
@@ -7,8 +7,9 @@ var appstate = require('../lib/appstate')
 var assert = require('mochawrapper')
 
 exports['AppState'] = {
-	'DISABLED': function () {var exports; exports={
 	'Exports': function () {
 		assert.exportsTest(appstate, 1)
 	},
-}}}
+	'TODO': function () {
+	},
+}

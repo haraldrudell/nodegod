@@ -1,14 +1,14 @@
-// test-godmodel.js
+// test-logpipe.js
 // © Harald Rudell 2013 MIT License
 
-var godmodel = require('../lib/godmodel')
+var logpipe = require('../lib/master/logpipe')
 
 // https://github.com/haraldrudell/mochawrapper
 var assert = require('mochawrapper')
 
-exports['GodModel'] = {
+exports['LogManager:'] = {
 	'Exports': function () {
-		assert.exportsTest(godmodel, 4)
+		assert.exportsTest(logpipe, 1)
 	},
 	'TODO': function () {
 	},

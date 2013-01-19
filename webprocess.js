@@ -9,7 +9,7 @@ require('apprunner').initApp(require('haraldops').init({
 			nodegodweb: {
 				onLoad: true,
 				sessionSecret: 'veryGreat',
-				PORT: 1111,
+				port: 1111,
 			}
 		}
 	}

@@ -1,8 +1,7 @@
 // test-masterserver.js
-// © Harald Rudell 2013
+// © Harald Rudell 2013 MIT License
 
 var masterserver = require('../lib/master/masterserver')
-var testedModule = masterserver
 
 // http://nodejs.org/api/net.html
 var net = require('net')
@@ -12,26 +11,12 @@ var events = require('events')
 // https://github.com/haraldrudell/mochawrapper
 var assert = require('mochawrapper')
 
-var exportsCount = 2
-var testedModuleType = 'object'
-var exportsTypes = {}
-
 var cn = net.createServer
 var cl = console.log
 
 exports['MasterServer:'] = {
 	'Exports': function () {
-
-		// if export count changes, we need to write more tests
-		assert.equal(typeof testedModule, testedModuleType, 'Module type incorrect')
-		assert.equal(Object.keys(testedModule).length, exportsCount, 'Export count changed')
-
-		// all exports function
-		for (var exportName in testedModule) {
-			var actual = typeof testedModule[exportName]
-			var expected = exportsTypes[exportName] || 'function'
-			assert.equal(actual, expected, 'Incorrect type of export ' + exportName)
-		}
+		assert.exportsTest(masterserver, 2)
 	},
 	'Constructor': function() {
 		var port = 21

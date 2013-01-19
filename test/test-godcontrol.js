@@ -1,11 +1,15 @@
 // test-godcontrol.js
-// © Harald Rudell 2013
+// © Harald Rudell 2013 MIT License
+
+var godcontrol = require('../lib/godcontrol')
 
 // https://github.com/haraldrudell/mochawrapper
 var assert = require('mochawrapper')
 
 exports['GodControl'] = {
-	'DISABLED': function () {var exports; exports={
-	'Test': function () {
+	'Exports': function () {
+		assert.exportsTest(godcontrol, 1)
 	},
-}}}
+	'TODO': function () {
+	},
+}
