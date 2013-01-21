@@ -1,5 +1,5 @@
 // logprocess.js
-// Log stdin to a rotatedlogger
+// Node God log process writes the filesystem log file
 // © Harald Rudell 2013 MIT License
 
 require('apprunner').initApp(require('haraldops').init({
@@ -8,10 +8,15 @@ require('apprunner').initApp(require('haraldops').init({
 	noInfoLog: true, // appinit quiet
 	logger: function () {}, // haraldops quiet
 	api: {
+		signals: {
+			'SIGINT' : false,
+			'SIGUSR2': false,
+		},
 		apiMap: {
 			fslogpipe: {
 				onLoad: true,
 				logName: process.argv[2],
+				ignoredSignals: ['SIGINT', 'SIGUSR2', 'SIGHUP'],
 			}
 		}
 	}

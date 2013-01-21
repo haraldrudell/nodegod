@@ -28,18 +28,24 @@ exports['UiManager:'] = {
 		assert.equal(typeof actual, 'function')
 	},
 	'LaunchUi': function(done) {
-		var launchTime = 7
-		var mockLogger = {
-			pLog: function () {},
-			configure: function () {},
-			write: function () {},
+		var opts = {
+			spawn: {
+				file: 'NODE',
+				args: ['SCRIPT']
+			},
+			rlog: {
+				pLog: function () {},
+				configure: function () {},
+				write: function () {},
+			},
+			launchTime: 7,
+			restartIntercept: restartIntercept,
 		}
-		var launchArray = ['EXECUTABLE', 'ARGUMENT']
 
 		var aLaunchData = []
 		var eLaunchData = [{
-			masterLaunch: launchTime,
-			rlog: mockLogger,
+			masterLaunch: opts.launchTime,
+			rlog: opts.rlog,
 		}]
 		appconduit.setLaunchData = function (o) {aLaunchData.push(o)}
 
@@ -51,8 +57,8 @@ exports['UiManager:'] = {
 
 		var aSpawn = []
 		var eSpawn = [[
-			launchArray[0],
-			launchArray.slice(1),
+			opts.spawn.file,
+			opts.spawn.args,
 			{detached: true, stdio: ['ignore', 'pipe', 'pipe', 'ipc']},
 		]]
 		child_process.spawn = function mockSpawn(c, a, o) {aSpawn.push([c, a, o]); return child}
@@ -65,9 +71,9 @@ exports['UiManager:'] = {
 		appconduit.uiConnect = function (f) {aUiConnect.push(f)}
 
 		var aException = []
-		var restartIntercept = function (e) {aException.push(e)}
+		function restartIntercept(e) {aException.push(e)}
 
-		uimanager.launchUi({launchArray: launchArray, restartIntercept: restartIntercept, rlog: mockLogger, launchTime: launchTime})
+		uimanager.launchUi(opts)
 
 		assert.deepEqual(aException, [], 'launchUi exceptions')
 		assert.deepEqual(aLaunchData, eLaunchData)

@@ -1,5 +1,5 @@
 // webprocess.js
-// Web server process for Node God
+// Node God Web process provides Web interface
 // © Harald Rudell 2012
 
 require('apprunner').initApp(require('haraldops').init({

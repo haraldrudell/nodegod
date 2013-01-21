@@ -17,7 +17,7 @@ var sru = processfinder.setResetUi
 var ipm = processfinder.isProcessMaster
 var lui = uimanager.launchUi
 var gur = uimanager.getUiRelauncher
-var lg = logpipe.getLogPipe
+var lg = logpipe.LogPipe
 
 exports['Node God Master:'] = {
 	'Exports': function () {
@@ -29,16 +29,18 @@ exports['Node God Master:'] = {
 			interface: '127.0.0.1',
 			ignoredSignals: ['SIGINT', 'SIGUSR2', 'SIGHUP'],
 			appIndentifier: 'nodegodmaster',
-			launchArray: ['node', require('path').join(__dirname, '..', 'webprocess')],
-			fsLogArray: ['node', require('path').join(__dirname, '..', 'logprocess')],
+			spawnWeb: {file: 'node', args: [require('path').join(__dirname, '..', 'webprocess')]},
+			spawnLog: {file: 'node', args: [require('path').join(__dirname, '..', 'logprocess')]},
 		}
-		var mockLogManager = {
-			log: function () {},
-			pLog: function () {},
-			connectPipe: function (cb) {cb()},
-			write: function () {},
+
+		logpipe.LogPipe = MockLogPipe
+		function MockLogPipe() {
+			this.log = function () {}
+			this.pLog = function () {}
+			this.connectPipe = function (cb) {cb()}
+			this.write = function () {}
+			this.end = function () {}
 		}
-		logpipe.LogPipe = function mockLogPipe() {return mockLogManager}
 
 		// execute is not master
 		var aOn = {}
@@ -85,8 +87,8 @@ exports['Node God Master:'] = {
 
 		var aLaunchUi = []
 		var eLaunchUi = [{
-			launchArray: ['node', path.join(__dirname, '..', 'webprocess')],
-			rlog: mockLogManager,
+			spawn: opts.spawnWeb,
+			rlog: 'x',
 			launchTime: 0
 		}]
 		uimanager.launchUi = function (opts) {aLaunchUi.push(opts)}
@@ -95,6 +97,7 @@ exports['Node God Master:'] = {
 
 		assert.deepEqual(aReset, eReset)
 		assert.equal(typeof(eLaunchUi[0].launchTime = aLaunchUi[0] && aLaunchUi[0].launchTime), 'number')
+		assert.ok((eLaunchUi[0].rlog = aLaunchUi[0] && aLaunchUi[0].rlog) instanceof MockLogPipe)
 		assert.deepEqual(aLaunchUi, eLaunchUi)
 	},
 	'after': function() {
@@ -103,6 +106,6 @@ exports['Node God Master:'] = {
 		processfinder.setResetUi = sru
 		uimanager.launchUi = lui
 		uimanager.getUiRelauncher = gur
-		logpipe.getLogPipe = lg
+		logpipe.LogPipe = lg
 	},
 }

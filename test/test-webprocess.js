@@ -1,7 +1,9 @@
 // test-webprocess.js
 // © Harald Rudell 2013 MIT License
 
+// https://github.com/haraldrudell/apprunner
 var apprunner = require('apprunner')
+https://github.com/haraldrudell/haraldops
 var haraldops = require('haraldops')
 
 // https://github.com/haraldrudell/mochawrapper

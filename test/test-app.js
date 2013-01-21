@@ -1,29 +1,40 @@
 // test-app.js
 // © Harald Rudell 2013 MIT License
 
-var nodegodmaster = require('../lib/master/nodegodmaster')
+// https://github.com/haraldrudell/apprunner
+var apprunner = require('apprunner')
+// https://github.com/haraldrudell/haraldops
+var haraldops = require('haraldops')
 
 // https://github.com/haraldrudell/mochawrapper
 var assert = require('mochawrapper')
 
-var run = nodegodmaster.run
+var hi = haraldops.init
+var ia = apprunner.initApp
 
 exports['App:'] = {
 	'Require': function () {
-		var aRun = []
-		nodegodmaster.run = function mockRun(o) {aRun.push(o)}
+		var aInit = []
+		apprunner.initApp = function mockInitApp(o) {aInit.push(o)}
+		haraldops.init = function mockInit(o) {return o}
 
 		require('../app')
 
-		assert.equal(aRun.length, 1)
-		var opts = aRun[0]
+		assert.equal(aInit.length, 1, 'app was already required')
+		var defaults = aInit[0]
+		assert.ok(defaults)
+		assert.equal(typeof defaults.appName, 'string')
+		assert.ok(defaults.api)
+		assert.ok(defaults.api.apiMap)
+		var opts = defaults.api.apiMap.masterlauncher
 		assert.ok(opts)
-		assert.equal(typeof opts.port, 'number')
-		assert.equal(typeof opts.appIdentifier, 'string')
-		assert.ok(Array.isArray(opts.launchArray))
-		assert.ok(Array.isArray(opts.fsLogArray))
+		assert.ok(opts.onLoad)
+		assert.ok(opts.spawn)
+		assert.equal(typeof opts.spawn.file, 'string')
+		assert.ok(Array.isArray(opts.spawn.args))
 	},
 	'after': function () {
-		nodegodmaster.run = run
+		haraldops.init = hi
+		apprunner.initApp = ia
 	},
 }

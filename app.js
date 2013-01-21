@@ -1,13 +1,21 @@
 // app.js
 // Nodegod manages apps
-// © Harald Rudell 2012
+// © Harald Rudell 2012 MIT License
 
-var appIdentifier = 'nodegodmaster'
-require('./lib/master/nodegodmaster').run({
-	port: 1113,
-	interface: '127.0.0.1',
-	ignoredSignals: ['SIGINT', 'SIGUSR2', 'SIGHUP'],
-	appIdentifier: appIdentifier,
-	launchArray: ['node', require('path').join(__dirname, 'webprocess')],
-	fsLogArray: ['node', require('path').join(__dirname, 'logprocess'), appIdentifier],
-})
+require('apprunner').initApp(require('haraldops').init({
+	appName: 'Node God',
+	noFile: true, // haraldops: don't load a settings file
+	noInfoLog: true, // appinit quiet
+	logger: function () {}, // haraldops quiet
+	api: {
+		apiMap: {
+			masterlauncher: {
+				onLoad: true,
+				spawn: {
+					file: 'node',
+					args: [require('path').join(__dirname, 'masterprocess')],
+				}
+			}
+		}
+	}
+}))
