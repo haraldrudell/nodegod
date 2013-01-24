@@ -2,7 +2,7 @@
 
 Node God manages node applications, restarts them on crash and produces a shared log.
 
-![alt Nodegod Screen Shot](https://raw.github.com/haraldrudell/nodegod/master/images/nodegod.png)
+![alt Nodegod Screen Shot](https://raw.github.com/haraldrudell/nodegod/master/test/images/nodegod.png)
 
 # Benefits
 
