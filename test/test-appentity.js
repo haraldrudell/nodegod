@@ -8,7 +8,7 @@ var assert = require('mochawrapper')
 
 exports['AppEntity'] = {
 	'Exports': function () {
-		assert.exportsTest(appentity, 2)
+		assert.exportsTest(appentity, 1)
 	},
 	'TODO': function () {
 	},
