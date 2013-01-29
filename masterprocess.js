@@ -10,7 +10,7 @@ require('./lib/master/nodegodmaster').run({
 	appIdentifier: appIdentifier,
 	spawnWeb: {
 		file: 'node',
-		args: ['--debug-brk', require('path').join(__dirname, 'webprocess')],
+		args: [require('path').join(__dirname, 'webprocess')],
 	},
 	spawnLog: {
 		file: 'node',
